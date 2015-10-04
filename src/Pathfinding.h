@@ -1,4 +1,6 @@
-
+#ifndef PATHFINDING_H
+#define PATHFINDING_H
+#include "RobotState.h"
 namespace Pathfinding {
   //Returns the best available heading based off of the algorithm 
   //Algorithm
@@ -13,3 +15,4 @@ namespace Pathfinding {
   //Note: http://en.cppreference.com/w/cpp/types/numeric_limits/infinity
   double rayHeuristic(double desiredHeading, double rayHeading, double rayDistance);
 }
+#endif
