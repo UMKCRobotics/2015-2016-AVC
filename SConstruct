@@ -1,7 +1,7 @@
 import fnmatch
 import os
 import argparse
-from subprocess import check_output
+from subprocess import Popen, PIPE
 
 AddOption('--test',action='store_true',help='Run Unit Tests', default=False)
 def get_all(folder,filetypes,filter_out_if_contains=[]):
@@ -39,6 +39,9 @@ else:
    VariantDir(test_build_dir,src_directory,duplicate=1)
    test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir))  
    def finish(target,source,env):
-   	print(check_output(['./test_main']))
+       process = Popen(['./test_main'],stdout=PIPE)
+       (output,err) = process.communicate()
+       exit_code = process.wait()
+       print(output)
    finish_command = Command('Run Test', [], finish)
    Depends(finish_command,test)
