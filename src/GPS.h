@@ -3,8 +3,8 @@
 #include <math.h>
 class GPSNode{
 public:
-  double lattitude, longitude;
-  GPSNode(double lattitude, double longitude) : lattitude(lattitude),longitude(longitude){}
+  double lattitude, longitude, heading;
+  GPSNode(double lattitude, double longitude, double heading) : lattitude(lattitude),longitude(longitude),heading(heading){}
 };
 
 class GPS{
@@ -15,6 +15,9 @@ class GPS{
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
   static double radiansToDegrees(double radians) {return radians * (180/M_PI);}
+  static initGPS()
+  static char[] retrieveGPS()
+  static char[] convertGPS(char rawData)
 };
 
 #endif
