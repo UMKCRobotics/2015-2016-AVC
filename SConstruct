@@ -18,7 +18,7 @@ def add_alternative_dir_to_all(dir,files):
 
 env = Environment()
 
-filetypes = ['.cpp','.h','.hpp']
+filetypes = ['.c','.cpp','.h','.hpp']
 
 src_directory = 'src'
 build_dir = 'build'

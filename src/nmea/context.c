@@ -8,7 +8,7 @@
  *
  */
 
-#include "nmea/context.h"
+#include "context.h"
 
 #include <string.h>
 #include <stdarg.h>

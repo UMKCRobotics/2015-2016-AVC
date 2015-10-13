@@ -10,7 +10,7 @@
 
 /*! \file tok.h */
 
-#include "nmea/tok.h"
+#include "tok.h"
 
 #include <stdarg.h>
 #include <stdlib.h>

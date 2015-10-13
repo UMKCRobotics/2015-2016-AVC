@@ -8,7 +8,7 @@
  *
  */
 
-#include "nmea/sentence.h"
+#include "sentence.h"
 
 #include <string.h>
 

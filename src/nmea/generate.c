@@ -8,10 +8,10 @@
  *
  */
 
-#include "nmea/tok.h"
-#include "nmea/sentence.h"
-#include "nmea/generate.h"
-#include "nmea/units.h"
+#include "tok.h"
+#include "sentence.h"
+#include "generate.h"
+#include "units.h"
 
 #include <string.h>
 #include <stdlib.h>

@@ -8,10 +8,10 @@
  *
  */
 
-#include "nmea/gmath.h"
-#include "nmea/generate.h"
-#include "nmea/generator.h"
-#include "nmea/context.h"
+#include "gmath.h"
+#include "generate.h"
+#include "generator.h"
+#include "context.h"
 
 #include <string.h>
 #include <stdlib.h>

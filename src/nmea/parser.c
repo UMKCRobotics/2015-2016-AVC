@@ -12,10 +12,10 @@
  * \file parser.h
  */
 
-#include "nmea/tok.h"
-#include "nmea/parse.h"
-#include "nmea/parser.h"
-#include "nmea/context.h"
+#include "tok.h"
+#include "parse.h"
+#include "parser.h"
+#include "context.h"
 
 #include <string.h>
 #include <stdlib.h>

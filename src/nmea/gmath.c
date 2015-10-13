@@ -10,7 +10,7 @@
 
 /*! \file gmath.h */
 
-#include "nmea/gmath.h"
+#include "gmath.h"
 
 #include <math.h>
 #include <float.h>

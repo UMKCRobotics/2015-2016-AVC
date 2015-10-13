@@ -54,11 +54,11 @@
  * \endcode
  */
 
-#include "nmea/tok.h"
-#include "nmea/parse.h"
-#include "nmea/context.h"
-#include "nmea/gmath.h"
-#include "nmea/units.h"
+#include "tok.h"
+#include "parse.h"
+#include "context.h"
+#include "gmath.h"
+#include "units.h"
 
 #include <string.h>
 #include <stdio.h>
