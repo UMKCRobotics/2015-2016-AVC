@@ -1,5 +1,6 @@
 #ifndef GPS_H
 #define GPS_H
+
 #include <math.h>
 class GPSNode{
 public:
@@ -16,5 +17,10 @@ class GPS{
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
   static double radiansToDegrees(double radians) {return radians * (180/M_PI);}
 };
+ 
+ static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired)
+{
+		return 
+}
 
 #endif
