@@ -1,8 +1,6 @@
 #include "GPS.h"
 #include <math.h>
 
-
-
 double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired){
   double angleBetweenNodes = GPS::calculateAngleToNode(current,desired);
   return AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes);

@@ -3,8 +3,9 @@
 void Pathfinding::readAllInQueue(){
   while(Pathfinding::serial.Peek() != 0){
     char* out_charp;
-    Pathfinding::serial.ReadString(out_charp,'$',MAX_SERIAL_LENGTH);
-    Pathfinding::parseReadingAndInsertIntoReadings(str(out_charp));
+    unsigned int stop_throwing_warnings = 128;
+    Pathfinding::serial.ReadString(out_charp,'$',stop_throwing_warnings);
+    Pathfinding::parseReadingAndInsertIntoReadings(out_charp);
   }
 }
 void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
@@ -24,7 +25,7 @@ void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
   Pathfinding::readings[key] = value;
 }
 
-double Pathfinding::bestAvailable(double desiredHeading){
+double Pathfinding::bestAvailableHeading(double desiredHeading){
   double best_heading;
   for(auto it = Pathfinding::readings.begin(); it != Pathfinding::readings.end();++it){
     double heuristic_value = Pathfinding::rayHeuristic(desiredHeading,it->first,it->second);

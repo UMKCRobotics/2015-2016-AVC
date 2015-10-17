@@ -20,6 +20,10 @@ env = Environment()
 
 filetypes = ['.c','.cpp','.h','.hpp']
 
+env.Append(CXXFLAGS = '-std=c++11')
+env.Append(CPPFLAGS = '-std=c++11')
+env.Append(LINKFLAGS = '-std=c++11')
+
 src_directory = 'src'
 build_dir = 'build'
 
@@ -33,11 +37,11 @@ def change_to_build_dir_and_glob(source_files,build_directory):
 
 if not GetOption('test'):
    VariantDir(build_dir,src_directory,duplicate=0)
-   env.Program(target = 'main',source = change_to_build_dir_and_glob(get_all(src_directory,filetypes),build_dir),CXXFLAGS="-std=c++0x")
+   env.Program(target = 'main',source = change_to_build_dir_and_glob(get_all(src_directory,filetypes),build_dir))
 
 else:
    VariantDir(test_build_dir,src_directory,duplicate=1)
-   test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir),CXXFLAGS="-std=c++0x")  
+   test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir))  
    def finish(target,source,env):
        process = Popen(['./test_main'],stdout=PIPE)
        (output,err) = process.communicate()

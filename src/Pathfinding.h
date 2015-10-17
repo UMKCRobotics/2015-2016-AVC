@@ -1,28 +1,25 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 #include "RobotState.h"
-#include "serial/seriallib.h"
+#include "serial/serialib.h"
 #include "AngleMath.h"
 
 #include <string>
 #include <unordered_map>
-using std::string;
-using std::str;
-using std::stod;
-using std::unordered_map
-
-
+using namespace std;
 
 #define MAX_SERIAL_LENGTH 10000000000
 
 namespace Pathfinding {
-  seriallib serial;
+  serialib serial;
   unordered_map<double,double> readings; //key is direction, value is distance
-  init(){
-    serial.Open();
-  };
+
   const char* DEVICE = "/dev/ACM0";
   const unsigned int BAUD = 9600;
+
+  void init(){
+    Pathfinding::serial.Open(DEVICE,BAUD);
+  }
   void readAllInQueue();
   void parseReadingAndInsertIntoReadings(string);
   
@@ -38,5 +35,5 @@ namespace Pathfinding {
   //rayHeuristic may return inf if ray is ultimately favorable (meaning we're heading towards it already and it's got infinite distance)
   //Note: http://en.cppreference.com/w/cpp/types/numeric_limits/infinity
   double rayHeuristic(double desiredHeading, double rayHeading, double rayDistance);
-}
+};
 #endif
