@@ -1,6 +1,7 @@
 #include "Pathfinding.h"
 
 void Pathfinding::readAllInQueue(){
+  LOG(INFO) << "Reaeading all queued data, size:" << Pathfinding::serial.Peek();
   while(Pathfinding::serial.Peek() != 0){
     char* out_charp;
     unsigned int stop_throwing_warnings = 128;
@@ -9,6 +10,7 @@ void Pathfinding::readAllInQueue(){
   }
 }
 void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
+  LOG(INFO) << "Pathfinding trying to parse" << out_string;
   string s_key,s_value;
   int i =0;
   while(out_string[i] != ','){
@@ -33,6 +35,7 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
       best_heading = heuristic_value;
     }
   }
+  LOG(INFO) << "PATHFINDING best" << best_heading;
   return best_heading;
 }
 double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, double rayDistance){

@@ -3,6 +3,7 @@
 #include "RobotState.h"
 #include "serial/serialib.h"
 #include "AngleMath.h"
+#include "logger.h"
 
 #include <string>
 #include <unordered_map>
