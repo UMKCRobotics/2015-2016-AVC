@@ -40,5 +40,9 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
 }
 double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, double rayDistance){
   //TODO: actually implement this
-  return rayDistance - AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading);
+  //took absolute value -- 
+  double deviationHeading = abs(AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading));
+  double inverseDev = (1/deviationHeading);
+  //return rayDistance - AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading);
+  return rayDistance*inverseDev;
 }
