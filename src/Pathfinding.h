@@ -1,13 +1,37 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 #include "RobotState.h"
+#include "serial/seriallib.h"
+#include "AngleMath.h"
+
+#include <string>
+#include <unordered_map>
+using std::string;
+using std::str;
+using std::stod;
+using std::unordered_map
+
+
+
+#define MAX_SERIAL_LENGTH 10000000000
+
 namespace Pathfinding {
+  seriallib serial;
+  unordered_map<double,double> readings; //key is direction, value is distance
+  init(){
+    serial.Open();
+  };
+  const char* DEVICE = "/dev/ACM0";
+  const unsigned int BAUD = 9600;
+  void readAllInQueue();
+  void parseReadingAndInsertIntoReadings(string);
+  
   //Returns the best available heading based off of the algorithm 
   //Algorithm
   //for each ray from the LIDAR, create a circle with radius a determined safe distance around anything less than a cutoff representing a 'safe area' near that object
   //Determine longest ray that is closest to desired heading using rayHeuristic
   //Return the heading of that ray as the new heading
-  double bestAvailableHeading(RobotState state,double desiredHeading);
+  double bestAvailableHeading(double desiredHeading);
 
   //Determine how favorable a ray is
   //rayDistance may be inf if the ray is past cutoff

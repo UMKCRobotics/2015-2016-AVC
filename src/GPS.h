@@ -2,6 +2,8 @@
 #define GPS_H
 #include <math.h>
 #include "nmea/nmea.h"
+#include "AngleMath.h"
+
 
 class GPSNode{
 public:
@@ -19,8 +21,6 @@ class GPS{
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
-  static double radiansToDegrees(double radians) {return radians * (180/M_PI);}
-  static double angleBetweenTwoAngles(double target, double source);
 
   //Calculate from where we are to the desired node
   double calculateToNode(GPSNode node);

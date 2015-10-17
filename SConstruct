@@ -33,11 +33,11 @@ def change_to_build_dir_and_glob(source_files,build_directory):
 
 if not GetOption('test'):
    VariantDir(build_dir,src_directory,duplicate=0)
-   env.Program(target = 'main',source = change_to_build_dir_and_glob(get_all(src_directory,filetypes),build_dir))
+   env.Program(target = 'main',source = change_to_build_dir_and_glob(get_all(src_directory,filetypes),build_dir),CXXFLAGS="-std=c++0x")
 
 else:
    VariantDir(test_build_dir,src_directory,duplicate=1)
-   test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir))  
+   test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir),CXXFLAGS="-std=c++0x")  
    def finish(target,source,env):
        process = Popen(['./test_main'],stdout=PIPE)
        (output,err) = process.communicate()
