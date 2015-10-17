@@ -2,6 +2,7 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-int main(void){
+int main(int argv, char* argc[]){
+  LOG(INFO) << "started program";
 	return 0;
 }

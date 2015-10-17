@@ -37,3 +37,4 @@ main
 test_build/*
 !test_build/.donotdelete
 .DS_STORE
+logs/*

@@ -13,6 +13,7 @@
 //  http://easylogging.muflihun.com
 //  http://muflihun.com
 //
+// tutorial is at github repo
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
 // Compilers and C++0x/C++11 Evaluation
