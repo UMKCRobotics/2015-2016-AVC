@@ -30,11 +30,12 @@
 
 #Custom stuff
 main
+*main
 .sconsign.dblite
 *~
 
 
 test_build/*
 !test_build/.donotdelete
-.DS_STORE
+.DS_Store
 logs/*

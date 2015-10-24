@@ -24,7 +24,7 @@ void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
   double key,value;
   key = stod(s_key);
   value = stod(s_value);
-  Pathfinding::readings[key] = value;
+  readings[key] = value;
 }
 
 double Pathfinding::bestAvailableHeading(double desiredHeading){
@@ -38,14 +38,16 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
   LOG(INFO) << "PATHFINDING best" << best_heading;
   return best_heading;
 }
+
 double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, double rayDistance){
-  //TODO: actually implement this
   //took absolute value -- 
   double deviationHeading = abs(AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading));
-  if(deviationHeading == 0)
-  inverseDev = 1;
-  else
-  double inverseDev = (1/deviationHeading);
-  //return rayDistance - AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading);
+  double inverseDev;
+  if(deviationHeading == 0){
+    inverseDev = 1;
+   }
+  else{
+    double inverseDev = (1/deviationHeading);
+  }
   return rayDistance*inverseDev;
 }
