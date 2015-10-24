@@ -42,6 +42,9 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, doubl
   //TODO: actually implement this
   //took absolute value -- 
   double deviationHeading = abs(AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading));
+  if(deviationHeading == 0)
+  inverseDev = 1;
+  else
   double inverseDev = (1/deviationHeading);
   //return rayDistance - AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading);
   return rayDistance*inverseDev;
