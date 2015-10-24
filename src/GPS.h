@@ -2,9 +2,14 @@
 #define GPS_H
 
 #include <math.h>
+#include <string>
+
+#include "serial/serialib.h"
 #include "nmea/nmea.h"
 #include "AngleMath.h"
+#include "logger.h"
 
+using namespace std;
 
 class GPSNode{
 public:
@@ -14,9 +19,14 @@ public:
 
 class GPS{
  private:
+  void readAllInQueue();
   nmeaINFO info;
   nmeaPARSER parser;
+  serialib serial;
+  char readAChar();
  public:
+  const char* PORT = "/dev/ttyUSB2";
+  const unsigned int BAUD = 38400;
   //Given our current heading, calculate in radians what we'd like our heading to be 
   //assuming the angle we are facing currently is 0
   //Basically, returns the radian value we need to adjust to
@@ -26,7 +36,10 @@ class GPS{
   //Calculate from where we are to the desired node
   double calculateToNode(GPSNode node);
   GPS();
-  ~GPS(){nmea_parser_destroy(&parser);}
+  ~GPS();
+   void debug(){
+      readAllInQueue();
+   };
   
 };
 

@@ -19,7 +19,6 @@ This is a licence-free software, it can be used by anyone who try to build a bet
 #ifndef SERIALIB_H
 #define SERIALIB_H
 
-
 // Used for TimeOut operations
 #include <sys/time.h>
 // Include for windows
@@ -120,10 +119,10 @@ public:
     // Return the number of bytes in the received buffer
     int     Peek();
 
-private:
     // Read a string (no timeout)
     int     ReadStringNoTimeOut  (char *String,char FinalChar,unsigned int MaxNbBytes);
 
+private:
 
 #if defined (_WIN32) || defined( _WIN64)
     HANDLE          hSerial;
