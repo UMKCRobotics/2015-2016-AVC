@@ -1,7 +1,11 @@
 #define CATCH_CONFIG_MAIN //Only do this here, include other tests below
 
-#include "GPS.h"
 #include "catch.hpp"
+#include "../src/GPS.h"
+#include "../src/Pathfinding.h"
+#include "../src/AngleMath.h"
+
+INITIALIZE_EASYLOGGINGPP//Don't remove this
 
 //Testing framework tutorial provided below
 //https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
@@ -11,11 +15,30 @@ TEST_CASE("BLANK TEST","TEST"){
 }
 TEST_CASE("GPS","CALCULATE ANGLES WORKS")
 {
-		double angles = calculateAngleToNode(GPSNode(0,0),GPSNode(0,1));
+  double angles = GPS::calculateAngleToNode(GPSNode(0,0),GPSNode(0,1));
+		REQUIRE(angles == 0);
+
+		angles = GPS::calculateAngleToNode(GPSNode(10,20),GPSNode(10,30));
 		REQUIRE(angles == 0);
 }
-TEST_CASE("GPS_2","CALCULATE ANGLES WORKS 2")
-{
-		double angles = alculatingAngleToNode(GPSNode(10,20),GPSNode(10,30);
-		REQUIRE(angles == 0);
+TEST_CASE("ANGLEMath","Angle between angles"){
+  REQUIRE(0 == AngleMath::angleBetweenTwoAngles(0,0));
+  double behindOutput = AngleMath::angleBetweenTwoAngles(0,180);
+  REQUIRE(-180 == behindOutput);
+  REQUIRE(30 == AngleMath::angleBetweenTwoAngles(0,30));
+  REQUIRE(-30 == AngleMath::angleBetweenTwoAngles(30,0));
+  REQUIRE(45 == AngleMath::angleBetweenTwoAngles(315,0));
+  REQUIRE(90 == AngleMath::angleBetweenTwoAngles(315,45));
+  REQUIRE(-90 == AngleMath::angleBetweenTwoAngles(45,315));
+}
+
+TEST_CASE("GPS calcuatedesired heading",""){
+  REQUIRE(0 == GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(0,1)));
+  REQUIRE(-180 == GPS::calculateDesiredHeading(180,GPSNode(0,0),GPSNode(0,1)));
+}
+TEST_CASE("Pathfinding","ray heuristic"){
+  REQUIRE(1 == Pathfinding::rayHeuristic(0,0,1));
+  REQUIRE(1 == Pathfinding::rayHeuristic(45,0,1));
+  REQUIRE(1 == Pathfinding::rayHeuristic(0,45,1));
+  REQUIRE(1 == Pathfinding::rayHeuristic(0,241,1));
 }
