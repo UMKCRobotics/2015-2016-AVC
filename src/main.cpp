@@ -1,13 +1,15 @@
 #include "logger.h"
 #include "GPS.h"
-
 INITIALIZE_EASYLOGGINGPP
 
 int main(int argv, char* argc[]){
+
+
+  el::Loggers::getLogger("gps");
   LOG(INFO) << "started program";
   GPS gps;
   while(true){
-    gps.debug(); 
+    LOG(INFO) << "test";
   }
-	return 0;
+  return 0;
 }

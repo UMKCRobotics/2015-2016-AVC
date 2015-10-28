@@ -20,9 +20,9 @@ env = Environment()
 
 filetypes = ['.c','.cpp','.h','.hpp']
 
-env.Append(CXXFLAGS = '-std=c++11')
-env.Append(CPPFLAGS = '-std=c++11')
+env.Append(CPPFLAGS = '-std=c++11 -pthread -D ELPP_THREAD_SAFE')
 env.Append(LINKFLAGS = '-std=c++11')
+env.Append(LIBS = ["pthread"])
 
 src_directory = 'src'
 build_dir = 'build'

@@ -9,7 +9,7 @@ double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSN
 double GPS::calculateAngleToNode(GPSNode current, GPSNode desired){
   //taken from http://wikicode.wikidot.com/get-angle-of-line-between-two-points
   double xDiff = desired.longitude - current.longitude;
-  double yDiff = desired.lattitude - current.lattitude;
+  double yDiff = desired.latitude - current.latitude;
   return atan2(yDiff,xDiff);
 }
 
@@ -45,18 +45,24 @@ string GPS::readNMEAString(){
 void GPS::readAllInQueue(){
   while(serial.Peek() > 0){
    string output =  readNMEAString();
-   CLOG(INFO,"gps") << "found data: " << output;
-   GPS::parseNMEAString(output,info);
+   CLOG(INFO,"gps") << "found string: " << output;
+   parseNMEAString(output);
+   logCurrentInfo();
   }
 }
 void GPS::logCurrentInfo(){
   //TODO: make sure this actually works
-   CLOG(INFO,"gps") << "lat long info. LAT:" << info.node.latitude << " LONG: " << info.node.longitude
-                    << " Sats in view:" << info.satsInView << " Sats in use: " << info.satsInUse
-                    << " Direction: " << info.heading
-                    << " Speed: " << info.speed << " PDOP(Precision): " << info.PDOP;
+  info.log();
 }
 GPS::GPS(){
+  gps_serial_thread = thread([this]{
+      openSerial();
+      while(true){
+        readAllInQueue();
+      }
+    });
+}
+void GPS::openSerial(){
   char status = serial.Open(PORT,BAUD);
   switch (status){
   case 1:
@@ -72,7 +78,7 @@ GPS::GPS(){
     CLOG(ERROR,"gps") << "Serial error while getting port params:" << PORT;
     break;
   case -4:
-    cLOG(ERROR,"gps") << "Serial speed not recognized: " << BAUD;
+    CLOG(ERROR,"gps") << "Serial speed not recognized: " << BAUD;
     break;
   case -5:
     CLOG(ERROR,"gps") << "Serial error while writing port parameters: " << PORT;
@@ -83,25 +89,27 @@ GPS::GPS(){
   default:
     CLOG(INFO,"gps") << "Unkown error opening device" << status;
   }
-}
 
+}
 GPS::~GPS(){
+  gps_serial_thread.join();
   serial.Close();
 }
 
 void GPS::parseNMEAString(string nmeastring){
-  char * line = nmeastring.c_str();
+  
+  const char * line = nmeastring.c_str();
         switch (minmea_sentence_id(line, false)) {
             case MINMEA_SENTENCE_GGA: {
-                minmea_sentence_gga frame;
+                struct minmea_sentence_gga frame;
                 if (minmea_parse_gga(&frame, line)) {
                   info.fixQuality = frame.fix_quality;
-                  info.node.latitude = minmea_tocoord(&frame.latitude);
-                  info.node.longitude = minmea_tocoord(&frame.longitude);
+                  info.node.latitude = minmea_rescale(&frame.latitude,100000);
+                  info.node.longitude = minmea_rescale(&frame.longitude,100000);
                   info.satsInUse = frame.satellites_tracked;
                 }
                 else {
-                  CLOG(ERROR,"gps")<< "GGA sentenced not parsed"
+                  CLOG(ERROR,"gps")<< "GGA sentenced not parsed";
                 }
             } break;
 
@@ -112,10 +120,10 @@ void GPS::parseNMEAString(string nmeastring){
                   info.deviation.longitude = minmea_tofloat(&frame.longitude_error_deviation);
                 }
                 else {
-                  CLOG(ERROR,"gps") << "GST sentence not parsed correctly"
+                  CLOG(ERROR,"gps") << "GST sentence not parsed correctly";
                 }
             } break;
-            case MINMEA_SENTENCE_GLL:
+        case MINMEA_SENTENCE_GLL:{
               minmea_sentence_gll frame;
               if(minmea_parse_gll(&frame,line)){
                 info.node.latitude = minmea_tocoord(&frame.latitude);
@@ -125,8 +133,9 @@ void GPS::parseNMEAString(string nmeastring){
               else{
                 CLOG(ERROR,"gps") << "GLL sentence not read correctly";
               }
+        }
               break;
-           case MINMEA_SENTENCE_GSA:
+        case MINMEA_SENTENCE_GSA:{
              minmea_sentence_gsa frame;
              if(minmea_parse_gsa(&frame,line)){
                info.pdop = minmea_tocoord(&frame.pdop);
@@ -135,16 +144,15 @@ void GPS::parseNMEAString(string nmeastring){
              else{
                CLOG(ERROR,"gps") << "error reading gsa string";
              }
-             break;
+        }break;
             case MINMEA_INVALID: {
-              CLOG(ERROR,"gps") << sentence << "is not valid";
+              CLOG(ERROR,"gps") << nmeastring << "is not valid";
             } break;
 
             default: {
-              CLOG(ERROR,"gps") <<  sentence <<" is not parsed");
+              CLOG(ERROR,"gps") <<  nmeastring <<" is not parsed";
             } break;
         }
-    }
-
-
 }
+
+
