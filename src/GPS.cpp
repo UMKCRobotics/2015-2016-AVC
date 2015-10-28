@@ -13,45 +13,41 @@ double GPS::calculateAngleToNode(GPSNode current, GPSNode desired){
   return atan2(yDiff,xDiff);
 }
 
-
-char GPS::readAChar(){
-  char data;
-  int output = serial.ReadString(&data,13,1000,5000);
-  if (output == -3){
-      LOG(ERROR) << "GPS max amount of bytes read";
-      return -1;
+string GPS::readNMEAString(){
+  char current_char;
+  char code;
+  string output;
+  while(true){
+    code = serial.ReadChar(&current_char);
+    //LOG(INFO) << "Current char: " << current_char;
+    if (code == -1){
+      LOG(ERROR) << "GPS error while setting timeout";
+      return "";
     }
-    if(output == -2){
+    if(code == -2){
       LOG(ERROR) << "GPS READ ERROR.";
-      return -1;
+      return "";
     }
-    if(output == -1){
-      LOG(ERROR) << "GPS Erorr setting timeout";
-      return -1;
+    if(code == 0){
+      LOG(ERROR) << "GPS Timeout reached";
+      return "";
     }
-    return data;
+    if(current_char == 13){ //We found a cr
+      serial.ReadChar(&current_char); //Read an lf 
+      return output += "\r\n";
+    }
+    else if(current_char == ' '){}
+    else{
+      output += current_char;
+    }
+  }
 }
+
 void GPS::readAllInQueue(){
-    LOG(INFO) << "GPS bytes in serial buffer: " << serial.Peek();
-    while(true){
-      LOG(INFO) << readAChar();
-    }
-    string data;
-    while(readAChar()!='G');
-    bool working = true;
-    while (working){
-      char nextChar = readAChar();
-      if(nextChar == 13){ //CR
-        readAChar(); //read the lf
-        working = false;
-      }
-      else{
-        data += nextChar;
-      }
-    }
-    
-   LOG(INFO) << "GPS found data: " << string(data);
-   nmea_parse(&parser,data.c_str(),data.length(),&info);
+  string output =  readNMEAString();
+   LOG(INFO) << "GPS found data: " << output;
+   int parsed = nmea_parse(&parser,output.c_str(),(int)strlen(output.c_str()),&info);
+   LOG(INFO) << "GPS parsed " << parsed << " packets.";
    LOG(INFO) << "GPS lat long info. LAT:" << info.lat << " LONG: " << info.lon;
    LOG(INFO) << "GPS Sats in view:" << info.satinfo.inview << " Sats in use: " << info.satinfo.inuse;
    LOG(INFO) << "GPS Direction: " << info.direction;

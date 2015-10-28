@@ -23,9 +23,9 @@ class GPS{
   nmeaINFO info;
   nmeaPARSER parser;
   serialib serial;
-  char readAChar();
+  string readNMEAString();
  public:
-  const char* PORT = "/dev/ttyUSB2";
+  const char* PORT = "/dev/ttyUSB0";
   const unsigned int BAUD = 38400;
   //Given our current heading, calculate in radians what we'd like our heading to be 
   //assuming the angle we are facing currently is 0
