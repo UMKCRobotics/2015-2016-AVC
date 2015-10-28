@@ -1,5 +1,6 @@
 #ifndef GPS_H
 #define GPS_H
+
 #include <math.h>
 #include "nmea/nmea.h"
 #include "AngleMath.h"
@@ -28,6 +29,7 @@ class GPS{
   ~GPS(){nmea_parser_destroy(&parser);}
   
 };
+
 
 #endif
 

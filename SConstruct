@@ -40,7 +40,7 @@ if not GetOption('test'):
    env.Program(target = 'main',source = change_to_build_dir_and_glob(get_all(src_directory,filetypes),build_dir))
 
 else:
-   VariantDir(test_build_dir,src_directory,duplicate=1)
+   VariantDir(test_build_dir,src_directory,duplicate=0)
    test = env.Program(target = 'test_main', source=change_to_build_dir_and_glob(get_all(src_directory,filetypes,['main.cpp']) + get_all(test_directory,filetypes),test_build_dir))  
    def finish(target,source,env):
        process = Popen(['./test_main'],stdout=PIPE)

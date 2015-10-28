@@ -13,7 +13,6 @@ double GPS::calculateAngleToNode(GPSNode current, GPSNode desired){
   return atan2(yDiff,xDiff);
 }
 
-
 GPS::GPS(){
   nmea_zero_INFO(&info);
   nmea_parser_init(&parser);
