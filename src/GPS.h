@@ -4,21 +4,24 @@
 #include <math.h>
 #include <string>
 #include "serial/serialib.h"
+#include "nmea/minmea.h"
 #include "AngleMath.h"
 #include "logger.h"
 
 using namespace std;
 
 struct GPSNode{
-  double lattitude, longitude; 
+  double latitude, longitude; 
 }
 struct GPSInfo{
   GPSNode node; //lat long
+  GPSNode deviation; //lat long deviation
   int lastFix; //last gps fix taken
+  int fixQuality; //Quality of fix
   int satsInView, satsInUse; //sat data
   double heading; // true north heading
   double speed; //landspeed
-  double PDOP; //precision
+  double pdop;
 };
 
 class GPS{
@@ -36,7 +39,7 @@ class GPS{
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
   
-  static void parseNMEAString(string nmeastring, GPSInfo& info);
+  void parseNMEAString(string nmeastring);
   
   void logCurrentInfo();
 
