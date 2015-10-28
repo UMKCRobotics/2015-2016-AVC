@@ -3,27 +3,30 @@
 
 #include <math.h>
 #include <string>
-
 #include "serial/serialib.h"
-#include "nmea/nmea.h"
 #include "AngleMath.h"
 #include "logger.h"
 
 using namespace std;
 
-class GPSNode{
-public:
-  double lattitude, longitude;
-  GPSNode(double lattitude, double longitude) : lattitude(lattitude),longitude(longitude){}
+struct GPSNode{
+  double lattitude, longitude; 
+}
+struct GPSInfo{
+  GPSNode node; //lat long
+  int lastFix; //last gps fix taken
+  int satsInView, satsInUse; //sat data
+  double heading; // true north heading
+  double speed; //landspeed
+  double PDOP; //precision
 };
 
 class GPS{
  private:
   void readAllInQueue();
-  nmeaINFO info;
-  nmeaPARSER parser;
   serialib serial;
   string readNMEAString();
+  GPSInfo info;
  public:
   const char* PORT = "/dev/ttyUSB0";
   const unsigned int BAUD = 38400;
@@ -32,15 +35,21 @@ class GPS{
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
+  
+  static void parseNMEAString(string nmeastring, GPSInfo& info);
+  
+  void logCurrentInfo();
 
   //Calculate from where we are to the desired node
   double calculateToNode(GPSNode node);
+
+  //TODO: should spawn a new thread to do all this
   GPS();
   ~GPS();
    void debug(){
       readAllInQueue();
    };
-  
+   
 };
 
 

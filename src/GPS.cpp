@@ -19,7 +19,6 @@ string GPS::readNMEAString(){
   string output;
   while(true){
     code = serial.ReadChar(&current_char);
-    //LOG(INFO) << "Current char: " << current_char;
     if (code == -1){
       LOG(ERROR) << "GPS error while setting timeout";
       return "";
@@ -34,7 +33,7 @@ string GPS::readNMEAString(){
     }
     if(current_char == 13){ //We found a cr
       serial.ReadChar(&current_char); //Read an lf 
-      return output += "\r\n";
+      return output;
     }
     else if(current_char == ' '){}
     else{
@@ -44,20 +43,20 @@ string GPS::readNMEAString(){
 }
 
 void GPS::readAllInQueue(){
-  string output =  readNMEAString();
+  while(serial.Peek() > 0){
+   string output =  readNMEAString();
    LOG(INFO) << "GPS found data: " << output;
-   int parsed = nmea_parse(&parser,output.c_str(),(int)strlen(output.c_str()),&info);
-   LOG(INFO) << "GPS parsed " << parsed << " packets.";
-   LOG(INFO) << "GPS lat long info. LAT:" << info.lat << " LONG: " << info.lon;
-   LOG(INFO) << "GPS Sats in view:" << info.satinfo.inview << " Sats in use: " << info.satinfo.inuse;
-   LOG(INFO) << "GPS Direction: " << info.direction;
+   GPS::parseNMEAString(output,info);
+  }
+}
+void GPS::logCurrentInfo(){
+  LOG(INFO) << "GPS lat long info. LAT:" << info.node.lattitude << " LONG: " << info.node.longitude;
+   LOG(INFO) << "GPS Sats in view:" << info.satsInView << " Sats in use: " << info.satsInUse;
+   LOG(INFO) << "GPS Direction: " << info.heading;
    LOG(INFO) << "GPS Speed: " << info.speed;
    LOG(INFO) << "PDOP(Precision): " << info.PDOP;
 }
-
 GPS::GPS(){
-  nmea_zero_INFO(&info);
-  nmea_parser_init(&parser);
   char status = serial.Open(PORT,BAUD);
   switch (status){
   case 1:
@@ -84,11 +83,12 @@ GPS::GPS(){
   default:
     LOG(INFO) << "GPS Unkown error opening device" << status;
   }
-  serial.FlushReceiver();
 }
 
 GPS::~GPS(){
   serial.Close();
-  nmea_parser_destroy(&parser);
 }
- 
+
+void GPS::parseNMEAString(string nmeastring, GPSInfo& info){
+  
+}
