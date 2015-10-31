@@ -18,6 +18,9 @@ class GPSNodelist {
   public:
     GPSNodelist(string);
     GPSNode getNextNode();
+    bool allNodesVisited(){
+      _currentIndex > _Filelines.size();
+    }
 };
 
 #endif

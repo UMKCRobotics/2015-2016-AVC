@@ -96,6 +96,6 @@ GPS::~GPS(){
   serial.Close();
 }
 
-
-
-
+double GPS::calculateHeadingToNode(GPSNode node){
+  return calculateAngleToNode(info.node,node);
+}

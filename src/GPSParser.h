@@ -16,8 +16,8 @@ struct GPSNode{
 struct GPSInfo{
   GPSNode node; //lat long
   GPSNode deviation; //lat long deviation
-  int lastFix; //last gps fix taken
-  int fixQuality; //Quality of fix
+  int lastFix = 0; //last gps fix taken
+  int fixQuality = 0; //Quality of fix
   int satsInView, satsInUse; //sat data
   long double heading = 0.0; // true north heading
   long double speed = 0.0; //landspeed 
