@@ -10,24 +10,29 @@
 
 #include <string>
 #include <unordered_map>
+#include <cmath>
+#include <thread>
+
 using namespace std;
 
 #define MAX_SERIAL_LENGTH 10000000000
-
 
 class Pathfinding {
  private:
   serialib serial;
   unordered_map<double,double> readings; //key is direction, value is distance
   void parseReadingAndInsertIntoReadings(string);
+  thread pathfinding_serial_thread;
+  void readAllInQueue();
+  void openSerial();
+  unordered_map<double,double> performObstactleGrowth();
  public:
-  const char* DEVICE = "/dev/ACM0";
+  const char* PORT = "/dev/ACM0";
   const unsigned int BAUD = 9600;
 
-  Pathfinding(){
-    serial.Open(DEVICE,BAUD);
-  }
-  void readAllInQueue();
+  const int SAFE_LENGTH = 10; //meters wide the car is
+
+  Pathfinding();
   
   //Returns the best available heading based off of the algorithm 
   //Algorithm
