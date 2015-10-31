@@ -9,29 +9,9 @@
 #include "nmea/minmea.h"
 #include "AngleMath.h"
 #include "logger.h"
+#include "GPSParser.h"
 
 using namespace std;
-
-struct GPSNode{
-  long latitude, longitude; 
-};
-struct GPSInfo{
-  GPSNode node; //lat long
-  GPSNode deviation; //lat long deviation
-  int lastFix; //last gps fix taken
-  int fixQuality; //Quality of fix
-  int satsInView, satsInUse; //sat data
-  double heading = 0.0; // true north heading
-  double speed = 0.0; //landspeed 
-  double pdop = 0.0;
-  void log(){
-    CLOG(INFO,"gps") << "Latitude: " << node.latitude << " Longitude:" << node.longitude;
-    CLOG(INFO,"gps") << "Lat Deviation: " << deviation.latitude << " Long Deviation: " << deviation.longitude;
-    CLOG(INFO, "gps") << "Last Fix: " << lastFix << " Fix Quality: " << fixQuality << " PDOP: " << pdop;
-      CLOG(INFO,"gps") << "Heading: " << heading << " Speed: " << speed;
-  }
-};
-
 class GPS{
  private:
   void readAllInQueue();
@@ -48,8 +28,6 @@ class GPS{
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
-  
-  void parseNMEAString(string nmeastring);
   
   void logCurrentInfo();
 

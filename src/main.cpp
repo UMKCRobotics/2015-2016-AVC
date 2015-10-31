@@ -9,7 +9,7 @@ int main(int argv, char* argc[]){
   LOG(INFO) << "started program";
   GPS gps;
   while(true){
-    LOG(INFO) << "test";
+    //LOG(INFO) << "test";
   }
   return 0;
 }
