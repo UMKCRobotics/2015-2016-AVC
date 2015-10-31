@@ -9,6 +9,7 @@
 #include "nmea/minmea.h"
 #include "AngleMath.h"
 #include "logger.h"
+#include "GPSParser.h"
 
 using namespace std;
 class GPS{
@@ -27,8 +28,6 @@ class GPS{
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
-  
-  void parseNMEAString(string nmeastring);
   
   void logCurrentInfo();
 

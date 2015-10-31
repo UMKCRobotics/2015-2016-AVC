@@ -46,7 +46,7 @@ void GPS::readAllInQueue(){
   while(serial.Peek() > 0){
    string output =  readNMEAString();
    CLOG(INFO,"gps") << "found string: " << output;
-   parseNMEAString(output);
+   GPSParser::parseNMEAString(output,info);
    logCurrentInfo();
   }
 }

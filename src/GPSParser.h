@@ -1,8 +1,17 @@
 #ifndef GPSPARSER_H
 #define GPSPARSER_H
 
+#include <string>
+
+#include "nmea/minmea.h"
+#include "logger.h"
+
+using namespace std;
+
 struct GPSNode{
   long latitude, longitude; 
+  GPSNode(){latitude = 0; longitude=0;}
+  GPSNode(long latitude, long longitude) :longitude(longitude), latitude(latitude){}
 };
 struct GPSInfo{
   GPSNode node; //lat long
@@ -22,9 +31,7 @@ struct GPSInfo{
 };
 
 namespace GPSParser{
-  void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info);
- private:
-  void GPSParser::parseVTGString(string nmeastring, GPSInfo& info);
+  void parseNMEAString(string nmeastring, GPSInfo& info);
 }
 
 #endif

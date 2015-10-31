@@ -48,6 +48,18 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
                CLOG(ERROR,"gps") << "error reading gsa string";
              }
         }break;
+        case MINMEA_SENTENCE_RMC:{
+          CLOG(INFO, "gps") << "ignoring RMC sentence...";
+        }break;
+        case CUSTOM_SENTENCE_VTG:{
+          custom_sentence_vtg frame;
+          if(custom_parse_vtg(&frame,line)){
+            info.heading = minmea_tocoord(&frame.true_track);
+          }
+          else{
+            CLOG(ERROR,"gps") << "VTG sentence not parsed properly";
+          }
+        }break;
             case MINMEA_INVALID: {
               CLOG(ERROR,"gps") << nmeastring << "is not valid";
             } break;
@@ -56,7 +68,4 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
               CLOG(ERROR,"gps") <<  nmeastring <<" is not parsed";
             } break;
         }
-}
-void GPSParser::parseVTGString(string nmeastring, GPSInfo& info){
-  
 }

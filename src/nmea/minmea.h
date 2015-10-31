@@ -74,7 +74,7 @@ struct minmea_sentence_gga {
     struct minmea_float height; char height_units;
     int dgps_age;
 };
-struct custom_sentence_vtg{
+struct custom_sentence_vtg {
   struct minmea_float true_track;
   struct minmea_float magnetic_track;
   struct minmea_float ground_speed_knots;
@@ -187,7 +187,7 @@ bool minmea_parse_gsa(struct minmea_sentence_gsa *frame, const char *sentence);
 bool minmea_parse_gll(struct minmea_sentence_gll *frame, const char *sentence);
 bool minmea_parse_gst(struct minmea_sentence_gst *frame, const char *sentence);
 bool minmea_parse_gsv(struct minmea_sentence_gsv *frame, const char *sentence);
-bool custom_parse_vtg(struct custom_parse_vtg *frame, const char *sentence);
+bool custom_parse_vtg(struct custom_sentence_vtg *frame, const char *sentence);
 
 /**
  * Convert GPS UTC date/time representation to a UNIX timestamp.

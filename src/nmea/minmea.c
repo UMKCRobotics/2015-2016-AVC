@@ -556,13 +556,13 @@ bool custom_parse_vtg(struct custom_sentence_vtg *frame, const char *sentence){
   if(!minmea_scan(sentence,"tfcfcfcfc",
                   type,
                   &frame->true_track,
-                  t
+                  &t,
                   &frame->magnetic_track,
-                  m
+                  &m,
                   &frame->ground_speed_knots,
-                  n
+                  &n,
                   &frame->ground_speed_kmh,
-                  k)){
+                  &k)){
     return false;
   }
   if(strcmp(type+2, "VTG"))
