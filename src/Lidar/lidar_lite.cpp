@@ -80,4 +80,10 @@ int Lidar_Lite::getDistance( void ){
 
 int Lidar_Lite::getError(void){
   return err;
+
+pass_to_main(int sendvalue){
+  serial.begin()
+  serial.write(sendvalue)
+}
+
 }

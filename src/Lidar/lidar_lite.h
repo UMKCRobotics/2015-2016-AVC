@@ -30,6 +30,7 @@ class Lidar_Lite{
     int readAndWait(int);
     int getDistance(void);
     int getError(void);
+    pass_to_main(int)
 };
 
 
