@@ -366,6 +366,8 @@ enum minmea_sentence_id minmea_sentence_id(const char *sentence, bool strict)
         return MINMEA_SENTENCE_GST;
     if (!strcmp(type+2, "GSV"))
         return MINMEA_SENTENCE_GSV;
+    if (!strcmp(type+2, "VTG"))
+      return CUSTOM_SENTENCE_VTG;
 
     return MINMEA_UNKNOWN;
 }
@@ -542,6 +544,30 @@ bool minmea_parse_gsv(struct minmea_sentence_gsv *frame, const char *sentence)
         return false;
 
     return true;
+}
+
+bool custom_parse_vtg(struct custom_sentence_vtg *frame, const char *sentence){
+  //$GPVTG,054.7,T,034.4,M,005.5,N,010.2,K*48
+  char type[6];
+  char t;
+  char m;
+  char n;
+  char k;
+  if(!minmea_scan(sentence,"tfcfcfcfc",
+                  type,
+                  &frame->true_track,
+                  t
+                  &frame->magnetic_track,
+                  m
+                  &frame->ground_speed_knots,
+                  n
+                  &frame->ground_speed_kmh,
+                  k)){
+    return false;
+  }
+  if(strcmp(type+2, "VTG"))
+    return false;
+  return true;
 }
 
 int minmea_gettime(struct timespec *ts, const struct minmea_date *date, const struct minmea_time *time_)

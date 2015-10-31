@@ -4,6 +4,7 @@
 #include "../src/GPS.h"
 #include "../src/Pathfinding.h"
 #include "../src/AngleMath.h"
+#include "../src/nmea/minmea.h"
 
 INITIALIZE_EASYLOGGINGPP//Don't remove this
 
@@ -43,4 +44,11 @@ TEST_CASE("Pathfinding","ray heuristic"){
   REQUIRE(1 == Pathfinding::rayHeuristic(45,0,1));
   REQUIRE(1 == Pathfinding::rayHeuristic(0,45,1));
   REQUIRE(1 == Pathfinding::rayHeuristic(0,241,1));
+}
+
+TEST_CASE("PARSER","vtg parser"){
+  //$GPVTG,054.7,T,034.4,M,005.5,N,010.2,K*48
+  custom_sentence_vtg frame;
+  char* vtg_string = "$GPVTG,054.7,T,034.4,M,005.5,N,010.2,K*48";
+
 }
