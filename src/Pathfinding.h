@@ -3,7 +3,6 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 
-#include "RobotState.h"
 #include "serial/serialib.h"
 #include "AngleMath.h"
 #include "logger.h"

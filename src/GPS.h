@@ -29,7 +29,7 @@ class GPS{
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
   void blockUntilFixed(){
-    while(info.lastFix == 0){ CLOG(INFO,"gps") << "Waiting on fix...";}
+    while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ CLOG(INFO,"gps") << "Waiting on fix...";}
   }
   
   bool isOverlapping(GPSNode node){ 

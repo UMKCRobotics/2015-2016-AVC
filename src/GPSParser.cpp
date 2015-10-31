@@ -32,7 +32,7 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
               if(minmea_parse_gll(&frame,line)){
                 info.node.latitude = custom_todouble(&frame.latitude);
                 info.node.longitude = custom_todouble(&frame.longitude);
-                info.lastFix = frame.time.hours * 1000 + frame.time.minutes * 100 + frame.time.seconds; //todo improve this
+                info.lastFix = frame.time.hours * 10000 + frame.time.minutes * 100 + frame.time.seconds; //todo improve this
               }
               else{
                 CLOG(ERROR,"gps") << "GLL sentence not read correctly";
