@@ -9,9 +9,9 @@
 using namespace std;
 
 struct GPSNode{
-  long latitude, longitude; 
+  long double latitude, longitude; 
   GPSNode(){latitude = 0; longitude=0;}
-  GPSNode(long latitude, long longitude) :longitude(longitude), latitude(latitude){}
+  GPSNode(long double latitude, long double longitude) :longitude(longitude), latitude(latitude){}
 };
 struct GPSInfo{
   GPSNode node; //lat long
@@ -19,9 +19,9 @@ struct GPSInfo{
   int lastFix; //last gps fix taken
   int fixQuality; //Quality of fix
   int satsInView, satsInUse; //sat data
-  double heading = 0.0; // true north heading
-  double speed = 0.0; //landspeed 
-  double pdop = 0.0;
+  long double heading = 0.0; // true north heading
+  long double speed = 0.0; //landspeed 
+  long double pdop = 0.0;
   void log(){
     CLOG(INFO,"gps") << "Latitude: " << node.latitude << " Longitude:" << node.longitude;
     CLOG(INFO,"gps") << "Lat Deviation: " << deviation.latitude << " Long Deviation: " << deviation.longitude;
