@@ -14,9 +14,11 @@ int main(int argv, char* argc[]){
   //Setting up logging stuff
   el::Configurations loggingConf;
   loggingConf.setToDefault();
-  loggingConf.parseFromText("GLOBAL:\n FILENAME = " + conf.data["logfile"].get<string>());
+  loggingConf.set(el::Level::Global, el::ConfigurationType::Filename, conf.data["logfile"].get<string>());
   el::Loggers::getLogger("gps");
   el::Loggers::getLogger("pathfinding");
+  el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
+
   LOG(INFO) << "started program";
 
   GPS gps(conf);
