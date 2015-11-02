@@ -31,9 +31,7 @@ class GPS{
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
-  void blockUntilFixed(){
-    while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ CLOG(INFO,"gps") << "Waiting on fix...";}
-  }
+  void blockUntilFixed();
   
   bool isOverlapping(GPSNode node){ 
     //todo implement

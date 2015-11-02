@@ -101,3 +101,8 @@ GPS::~GPS(){
 double GPS::calculateHeadingToNode(GPSNode node){
   return calculateAngleToNode(info.node,node);
 }
+void GPS::blockUntilFixed(){
+    while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
+      CLOG_EVERY_N(10,INFO,"gps") << "Waiting on fix...";
+   }
+}
