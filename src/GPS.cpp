@@ -51,7 +51,6 @@ void GPS::readAllInQueue(){
   }
 }
 void GPS::logCurrentInfo(){
-  //TODO: make sure this actually works
   info.log();
 }
 GPS::GPS(Conf c){
@@ -72,35 +71,27 @@ void GPS::openSerial(){
     CLOG(INFO,"gps") << "Serial opened successfully";
     break;
   case -1:
-    CLOG(ERROR,"gps") << "FATAL: Serial couldn't find device: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"gps") << "Serial couldn't find device: " << PORT;
     break;
   case -2:
-    CLOG(ERROR,"gps") << "FATAL: Serial couldn't open device: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"gps") << "Serial couldn't open device: " << PORT;
     break;
   case -3:
-    CLOG(ERROR,"gps") << "FATAL: Serial error while getting port params:" << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"gps") << "Serial error while getting port params:" << PORT;
     break;
   case -4:
-    CLOG(ERROR,"gps") << "FATAL: Serial speed not recognized: " << BAUD;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"gps") << "Serial speed not recognized: " << BAUD;
     break;
   case -5:
-    CLOG(ERROR,"gps") << "FATAL: Serial error while writing port parameters: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"gps") << "Serial error while writing port parameters: " << PORT;
     break;
   case -6:
     CLOG(ERROR,"gps") << "FATAL: Error while writing timeout parameters: " << PORT;
-    exit(EXIT_FAILURE);
     break;
   default:
-    CLOG(INFO,"gps") << "FATAL: Unkown error opening device" << status;
-    exit(EXIT_FAILURE);
-  }
-
+    CLOG(FATAL,"gps") << "Unkown error opening device" << status; exit(EXIT_FAILURE);}
 }
+
 GPS::~GPS(){
   threadContinue = false;
   gps_serial_thread.join();

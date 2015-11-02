@@ -76,32 +76,26 @@ void Pathfinding::openSerial(){
     CLOG(INFO,"pathfinding") << "Serial opened successfully";
     break;
   case -1:
-    CLOG(ERROR,"pathfinding") << "FATAL: Serial couldn't find device: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Serial couldn't find device: " << PORT;
     break;
   case -2:
-    CLOG(ERROR,"pathfinding") << "FATAL: Serial couldn't open device: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Serial couldn't open device: " << PORT;
     break;
   case -3:
-    CLOG(ERROR,"pathfinding") << "FATAL: Serial error while getting port params:" << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Serial error while getting port params:" << PORT;
     break;
   case -4:
-    CLOG(ERROR,"pathfinding") << "FATAL: Serial speed not recognized: " << BAUD;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Serial speed not recognized: " << BAUD;
     break;
   case -5:
-    CLOG(ERROR,"pathfinding") << "FATAL: Serial error while writing port parameters: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Serial error while writing port parameters: " << PORT;
     break;
   case -6:
-    CLOG(ERROR,"pathfinding") << "FATAL: Error while writing timeout parameters: " << PORT;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Error while writing timeout parameters: " << PORT;
     break;
   default:
-    CLOG(INFO,"pathfinding") << "FATAL: Unkown error opening device" << status;
-    exit(EXIT_FAILURE);
+    CLOG(FATAL,"pathfinding") << "Unkown error opening device" << status;
+    break;
   }
 }
 Pathfinding::Pathfinding(Conf c){
