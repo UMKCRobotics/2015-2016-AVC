@@ -1,9 +1,9 @@
 #include "GPSNodelist.h"
 
-GPSNodelist::GPSNodelist(string filename) {
+GPSNodelist::GPSNodelist(Conf c) {
 	_currentIndex = 0;
 	string line;
-	ifstream nodefile(filename.c_str());
+	ifstream nodefile(c.data["nodelist"]["file"].get<string>());
 	while (getline(nodefile, line))
 	{
 		_Filelines.push_back(line);

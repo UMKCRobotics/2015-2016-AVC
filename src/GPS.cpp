@@ -54,7 +54,9 @@ void GPS::logCurrentInfo(){
   //TODO: make sure this actually works
   info.log();
 }
-GPS::GPS(){
+GPS::GPS(Conf c){
+  PORT = c.data["gps"]["port"].get<string>();
+  BAUD = c.data["gps"]["baud"];
   threadContinue = true;
   gps_serial_thread = thread([this]{
       openSerial();
@@ -64,7 +66,7 @@ GPS::GPS(){
     });
 }
 void GPS::openSerial(){
-  char status = serial.Open(PORT,BAUD);
+  char status = serial.Open(PORT.c_str(),BAUD);
   switch (status){
   case 1:
     CLOG(INFO,"gps") << "Serial opened successfully";

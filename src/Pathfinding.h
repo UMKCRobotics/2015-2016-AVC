@@ -6,6 +6,7 @@
 #include "serial/serialib.h"
 #include "AngleMath.h"
 #include "logger.h"
+#include "Conf.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -27,14 +28,13 @@ class Pathfinding {
   void openSerial();
   unordered_map<double,double> performObstactleGrowth();
   bool threadContinue;
+  string PORT;
+  unsigned int BAUD;
+
+  int SAFE_LENGTH; //meters wide the car is
+  int RAY_MAXIMUM; //anything greater than this is considered 'infinite'
  public:
-  const char* PORT = "/dev/ACM0";
-  const unsigned int BAUD = 9600;
-
-  const int SAFE_LENGTH = 10; //meters wide the car is
-  const int RAY_MAXIMUM = 100; //anything less than this is considered 'infinite'
-
-  Pathfinding();
+    Pathfinding(Conf c);
   ~Pathfinding();
   
   //Returns the best available heading based off of the algorithm 

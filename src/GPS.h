@@ -11,6 +11,7 @@
 #include "AngleMath.h"
 #include "logger.h"
 #include "GPSParser.h"
+#include "Conf.hpp"
 
 using namespace std;
 class GPS{
@@ -21,10 +22,10 @@ class GPS{
   thread gps_serial_thread;
   void openSerial();
   bool threadContinue;
+  string PORT;
+  unsigned int BAUD;
  public:
   GPSInfo info;
-  const char* PORT = "/dev/ttyUSB0";
-  const unsigned int BAUD = 38400;
   //Given our current heading, calculate in radians what we'd like our heading to be 
   //assuming the angle we are facing currently is 0
   //Basically, returns the radian value we need to adjust to
@@ -45,7 +46,7 @@ class GPS{
   double calculateHeadingToNode(GPSNode node);
 
   //TODO: should spawn a new thread to do all this
-  GPS();
+  GPS(Conf c);
   ~GPS();
   void debug(){
       readAllInQueue();

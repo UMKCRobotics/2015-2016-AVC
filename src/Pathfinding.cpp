@@ -70,7 +70,7 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, doubl
 }
 
 void Pathfinding::openSerial(){
-  char status = serial.Open(PORT,BAUD);
+  char status = serial.Open(Pathfinding::PORT.c_str(),Pathfinding::BAUD);
   switch (status){
   case 1:
     CLOG(INFO,"pathfinding") << "Serial opened successfully";
@@ -104,7 +104,11 @@ void Pathfinding::openSerial(){
     exit(EXIT_FAILURE);
   }
 }
-Pathfinding::Pathfinding(){
+Pathfinding::Pathfinding(Conf c){
+  PORT = c.data["pathfinding"]["port"].get<string>();
+  BAUD = c.data["pathfinding"]["baud"];
+  SAFE_LENGTH = c.data["pathfinding"]["baud"];
+  RAY_MAXIMUM = c.data["pathfinding"]["ray_maximum"];
   threadContinue = true;
   pathfinding_serial_thread = thread([this]{
       openSerial();

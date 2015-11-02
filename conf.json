@@ -1,0 +1,16 @@
+{
+	"logfile": "./logs/log",
+	"gps": {
+		"port": "tty/USB0/",
+		"baud": 38400
+	},
+	"pathfinding":{
+		"port": "tty/USB1",
+		"baud": 9600,
+		"safe_length": 10,
+		"ray_maximum": 100
+	},
+	"nodelist": {
+		"file":"./nodes/"
+	}
+}

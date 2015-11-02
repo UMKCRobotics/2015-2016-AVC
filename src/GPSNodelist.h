@@ -2,6 +2,7 @@
 #define GPSNODELIST_H
 
 #include "GPSParser.h"
+#include "Conf.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -16,7 +17,7 @@ class GPSNodelist {
     int _currentIndex;
     string getNextNodeString();
   public:
-    GPSNodelist(string);
+    GPSNodelist(Conf);
     GPSNode getNextNode();
     bool allNodesVisited(){
       _currentIndex >= _Filelines.size();
