@@ -20,10 +20,10 @@ void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
     s_value += out_string[i];
     ++i;
   }
-  double key,value;
-  key = stod(s_key);
-  value = stod(s_value);
-  readings[key] = value;
+  double direction,distance;
+  direction = stod(s_key);
+  distance = stod(s_value);
+  readings[direction] = (distance >= RAY_MAXIMUM)? RAY_MAXIMUM : distance;
 }
 
 double Pathfinding::bestAvailableHeading(double desiredHeading){
@@ -43,11 +43,13 @@ unordered_map<double,double> Pathfinding::performObstactleGrowth(){
   unordered_map<double,double> newMap (readings);
   for(auto ray = Pathfinding::readings.begin(); ray != Pathfinding::readings.end(); ++ray){
     for(auto other_ray = Pathfinding::readings.begin(); other_ray != Pathfinding::readings.end(); ++other_ray){ 
-      double beta = atan2(SAFE_LENGTH/2,other_ray->second);
-      double angle_between_two_rays = AngleMath::angleBetweenTwoAngles(ray->first,other_ray->first);
-      if(angle_between_two_rays < beta){
-        double v = other_ray->second - SAFE_LENGTH/2;
-        readings[ray->first] = v;
+      if(other_ray->second <= RAY_MAXIMUM){
+        double beta = abs(atan2(SAFE_LENGTH/2,other_ray->second));
+        double angle_between_two_rays = abs(AngleMath::angleBetweenTwoAngles(ray->first,other_ray->first));
+        if(angle_between_two_rays < beta){
+            double v = other_ray->second - SAFE_LENGTH/2;
+            readings[ray->first] = v;
+        }
       }
     }
   }
@@ -74,32 +76,45 @@ void Pathfinding::openSerial(){
     CLOG(INFO,"pathfinding") << "Serial opened successfully";
     break;
   case -1:
-    CLOG(ERROR,"pathfinding") << "Serial couldn't find device: " << PORT;
+    CLOG(ERROR,"pathfinding") << "FATAL: Serial couldn't find device: " << PORT;
+    exit(EXIT_FAILURE);
     break;
   case -2:
-    CLOG(ERROR,"pathfinding") << "Serial couldn't open device: " << PORT;
+    CLOG(ERROR,"pathfinding") << "FATAL: Serial couldn't open device: " << PORT;
+    exit(EXIT_FAILURE);
     break;
   case -3:
-    CLOG(ERROR,"pathfinding") << "Serial error while getting port params:" << PORT;
+    CLOG(ERROR,"pathfinding") << "FATAL: Serial error while getting port params:" << PORT;
+    exit(EXIT_FAILURE);
     break;
   case -4:
-    CLOG(ERROR,"pathfinding") << "Serial speed not recognized: " << BAUD;
+    CLOG(ERROR,"pathfinding") << "FATAL: Serial speed not recognized: " << BAUD;
+    exit(EXIT_FAILURE);
     break;
   case -5:
-    CLOG(ERROR,"pathfinding") << "Serial error while writing port parameters: " << PORT;
+    CLOG(ERROR,"pathfinding") << "FATAL: Serial error while writing port parameters: " << PORT;
+    exit(EXIT_FAILURE);
     break;
   case -6:
-    CLOG(ERROR,"gps") << "Error while writing timeout parameters: " << PORT;
+    CLOG(ERROR,"pathfinding") << "FATAL: Error while writing timeout parameters: " << PORT;
+    exit(EXIT_FAILURE);
     break;
   default:
-    CLOG(INFO,"gps") << "Unkown error opening device" << status;
+    CLOG(INFO,"pathfinding") << "FATAL: Unkown error opening device" << status;
+    exit(EXIT_FAILURE);
   }
 }
 Pathfinding::Pathfinding(){
+  threadContinue = true;
   pathfinding_serial_thread = thread([this]{
       openSerial();
-      while(true){
+      while(threadContinue){
         readAllInQueue();
       }
     });
+}
+Pathfinding::~Pathfinding(){
+  threadContinue= false;
+  pathfinding_serial_thread.join();
+  serial.Close();
 }

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <cmath>
 #include <thread>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -25,13 +26,16 @@ class Pathfinding {
   void readAllInQueue();
   void openSerial();
   unordered_map<double,double> performObstactleGrowth();
+  bool threadContinue;
  public:
   const char* PORT = "/dev/ACM0";
   const unsigned int BAUD = 9600;
 
   const int SAFE_LENGTH = 10; //meters wide the car is
+  const int RAY_MAXIMUM = 100; //anything less than this is considered 'infinite'
 
   Pathfinding();
+  ~Pathfinding();
   
   //Returns the best available heading based off of the algorithm 
   //Algorithm

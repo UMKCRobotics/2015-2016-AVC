@@ -20,8 +20,8 @@ env = Environment()
 
 filetypes = ['.c','.cpp','.h','.hpp']
 
-env.Append(CPPFLAGS = '-std=c++11 -pthread -D ELPP_THREAD_SAFE -D ELPP_STACKTRACE_ON_CRASH')
-env.Append(LINKFLAGS = '-std=c++11')
+env.Append(CPPFLAGS = '-std=c++0x -pthread -D ELPP_THREAD_SAFE -D ELPP_STACKTRACE_ON_CRASH')
+env.Append(LINKFLAGS = '-std=c++0x')
 env.Append(LIBS = ["pthread"])
 
 src_directory = 'src'

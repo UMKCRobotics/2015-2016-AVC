@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string>
 #include <thread>
+#include <stdlib.h>
 
 #include "serial/serialib.h"
 #include "nmea/minmea.h"
@@ -19,6 +20,7 @@ class GPS{
   string readNMEAString();
   thread gps_serial_thread;
   void openSerial();
+  bool threadContinue;
  public:
   GPSInfo info;
   const char* PORT = "/dev/ttyUSB0";
