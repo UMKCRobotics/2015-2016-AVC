@@ -16,6 +16,7 @@ using json = nlohmann::json;
 class Conf{
 public:
   json data;
+  Conf(){}
   Conf(string filename){
 //taken from  https://stackoverflow.com/questions/2602013/read-whole-ascii-file-into-c-stdstring
    ifstream t(filename);

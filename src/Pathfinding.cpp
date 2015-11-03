@@ -23,16 +23,27 @@ void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
   double direction,distance;
   direction = stod(s_key);
   distance = stod(s_value);
-  readings[direction] = (distance >= RAY_MAXIMUM)? RAY_MAXIMUM : distance;
+  bool rayMax = configuration.data["pathfinding"]["ray_maximum"];
+  readings[direction] = (distance >= rayMax)? rayMax : distance;
 }
 
 double Pathfinding::bestAvailableHeading(double desiredHeading){
-  double best_heading;
-  unordered_map<double,double> grown_readings = performObstactleGrowth();
-  for(auto it = grown_readings.begin(); it != grown_readings.end();++it){
-    double heuristic_value = Pathfinding::rayHeuristic(desiredHeading,it->first,it->second);
-    if(heuristic_value > best_heading){
-      best_heading = heuristic_value;
+  double best_heading = -1;
+  if(configuration.data["pathfinding"]["perform_growth"]){
+    unordered_map<double,double> grown_readings = performObstactleGrowth();
+    for(auto it = grown_readings.begin(); it != grown_readings.end();++it){
+        double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
+        if(heuristic_value > best_heading){
+          best_heading = heuristic_value;
+        }
+    }
+  }
+  else{
+    for(auto it = readings.begin(); it != readings.end();++it){
+        double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
+        if(heuristic_value > best_heading){
+          best_heading = heuristic_value;
+        }
     }
   }
   CLOG(INFO,"pathfinding") << "best" << best_heading;
@@ -41,14 +52,16 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
 
 unordered_map<double,double> Pathfinding::performObstactleGrowth(){
   unordered_map<double,double> newMap (readings);
+  bool rayMax = configuration.data["pathfinding"]["ray_maximum"];
+  double safeLength = configuration.data["pathfinding"]["safe_length"];
   for(auto ray = Pathfinding::readings.begin(); ray != Pathfinding::readings.end(); ++ray){
     for(auto other_ray = Pathfinding::readings.begin(); other_ray != Pathfinding::readings.end(); ++other_ray){ 
-      if(other_ray->second <= RAY_MAXIMUM){
-        double beta = abs(atan2(SAFE_LENGTH/2,other_ray->second));
+      if(other_ray->second <= rayMax){
+        double beta = abs(atan2(safeLength/2,other_ray->second));
         double angle_between_two_rays = abs(AngleMath::angleBetweenTwoAngles(ray->first,other_ray->first));
         if(angle_between_two_rays < beta){
-            double v = other_ray->second - SAFE_LENGTH/2;
-            readings[ray->first] = v;
+            double v = other_ray->second - safeLength/2;
+            newMap[ray->first] = v;
         }
       }
     }
@@ -66,32 +79,35 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, doubl
   else{
     double inverseDev = (1/deviationHeading);
   }
+  if(configuration.data["pathfinding"]["add_degree_coefficient"]){return rayDistance*inverseDev*(desiredHeading/60);}//60 should be sweep angle
   return rayDistance*inverseDev;
 }
 
 void Pathfinding::openSerial(){
-  char status = serial.Open(Pathfinding::PORT.c_str(),Pathfinding::BAUD);
+  string port = configuration.data["pathfinding"]["port"].get<string>();
+  int baud = configuration.data["pathfinding"]["baud"];
+  char status = serial.Open(port.c_str(),baud);
   switch (status){
   case 1:
     CLOG(INFO,"pathfinding") << "Serial opened successfully";
     break;
   case -1:
-    CLOG(FATAL,"pathfinding") << "Serial couldn't find device: " << PORT;
+    CLOG(FATAL,"pathfinding") << "Serial couldn't find device: " << port;
     break;
   case -2:
-    CLOG(FATAL,"pathfinding") << "Serial couldn't open device: " << PORT;
+    CLOG(FATAL,"pathfinding") << "Serial couldn't open device: " << port;
     break;
   case -3:
-    CLOG(FATAL,"pathfinding") << "Serial error while getting port params:" << PORT;
+    CLOG(FATAL,"pathfinding") << "Serial error while getting port params:" << port;
     break;
   case -4:
-    CLOG(FATAL,"pathfinding") << "Serial speed not recognized: " << BAUD;
+    CLOG(FATAL,"pathfinding") << "Serial speed not recognized: " << baud;
     break;
   case -5:
-    CLOG(FATAL,"pathfinding") << "Serial error while writing port parameters: " << PORT;
+    CLOG(FATAL,"pathfinding") << "Serial error while writing port parameters: " << port;
     break;
   case -6:
-    CLOG(FATAL,"pathfinding") << "Error while writing timeout parameters: " << PORT;
+    CLOG(FATAL,"pathfinding") << "Error while writing timeout parameters: " << port;
     break;
   default:
     CLOG(FATAL,"pathfinding") << "Unkown error opening device" << status;
@@ -99,10 +115,7 @@ void Pathfinding::openSerial(){
   }
 }
 Pathfinding::Pathfinding(Conf c){
-  PORT = c.data["pathfinding"]["port"].get<string>();
-  BAUD = c.data["pathfinding"]["baud"];
-  SAFE_LENGTH = c.data["pathfinding"]["baud"];
-  RAY_MAXIMUM = c.data["pathfinding"]["ray_maximum"];
+  configuration = c;
   threadContinue = true;
   pathfinding_serial_thread = thread([this]{
       openSerial();

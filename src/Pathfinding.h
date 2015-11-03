@@ -28,11 +28,8 @@ class Pathfinding {
   void openSerial();
   unordered_map<double,double> performObstactleGrowth();
   bool threadContinue;
-  string PORT;
-  unsigned int BAUD;
 
-  int SAFE_LENGTH; //meters wide the car is
-  int RAY_MAXIMUM; //anything greater than this is considered 'infinite'
+  Conf configuration;
  public:
     Pathfinding(Conf c);
   ~Pathfinding();
@@ -48,6 +45,6 @@ class Pathfinding {
   //rayDistance may be inf if the ray is past cutoff
   //rayHeuristic may return inf if ray is ultimately favorable (meaning we're heading towards it already and it's got infinite distance)
   //Note: http://en.cppreference.com/w/cpp/types/numeric_limits/infinity
-  static double rayHeuristic(double desiredHeading, double rayHeading, double rayDistance);
+  double rayHeuristic(double desiredHeading, double rayHeading, double rayDistance);
 };
 #endif
