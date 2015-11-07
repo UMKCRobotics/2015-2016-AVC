@@ -14,5 +14,9 @@
     },
     "nodelist": {
         "file":"./nodes/"
+    },
+    "motorcontroller": {
+        "port": "tty/USB1",
+        "baud": 57600
     }
 }
