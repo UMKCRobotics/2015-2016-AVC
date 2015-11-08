@@ -2,6 +2,7 @@
 #include "GPS.h"
 #include "Pathfinding.h"
 #include "GPSNodelist.h"
+#include "MotorController.h"
 #include "Conf.hpp"
 
 #include <string>
