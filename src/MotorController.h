@@ -10,7 +10,7 @@
 class MotorController{
   private:
     void openSerial();
-  	serialib serial;
+    serialib serial;
   	Conf configuration;
   public:
   	MotorController(Conf c);
