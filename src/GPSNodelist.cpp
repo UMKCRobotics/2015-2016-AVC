@@ -15,6 +15,7 @@ string GPSNodelist::getNextNodeString() {
 	if (_currentIndex < _Filelines.size())
 	{
 		nextNode = _Filelines.at(_currentIndex);
+		_currentIndex += 1;
 	}
 	else
 	{
@@ -39,8 +40,6 @@ GPSNode GPSNodelist::getNextNode() {
 
 	first >> latitude;
 	second >> longitude;
-
-	_currentIndex += 1;
 
 	return GPSNode(latitude,longitude);
 }
