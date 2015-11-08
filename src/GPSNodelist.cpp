@@ -20,7 +20,6 @@ string GPSNodelist::getNextNodeString() {
 	{
 		nextNode = "END_OF_FILE";
 	}
-	_currentIndex += 1;
 	return nextNode;
 }
 
@@ -40,6 +39,8 @@ GPSNode GPSNodelist::getNextNode() {
 
 	first >> latitude;
 	second >> longitude;
+
+	_currentIndex += 1;
 
 	return GPSNode(latitude,longitude);
 }
