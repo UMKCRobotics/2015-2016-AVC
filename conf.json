@@ -1,11 +1,11 @@
 {
     "logfile": "./logs/log",
     "gps": {
-        "port": "/dev/ttyUSB0/",
+        "port": "/dev/ttyUSB0",
         "baud": 38400
     },
     "pathfinding":{
-        "port": "/dev/ttyACM0",
+        "port": "/dev/ttyACM3",
         "baud": 9600,
         "safe_length": 10,
         "ray_maximum": 100,
@@ -13,10 +13,10 @@
         "add_degree_coefficient": true
     },
     "nodelist": {
-        "file":"./nodes/"
+        "file":"./nodes"
     },
     "motorcontroller": {
-        "port": "/dev/ttyACM0",
+        "port": "/dev/ttyACM3",
         "baud": 57600
     }
 }

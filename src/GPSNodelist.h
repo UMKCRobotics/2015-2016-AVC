@@ -20,7 +20,13 @@ class GPSNodelist {
     GPSNodelist(Conf);
     GPSNode getNextNode();
     bool allNodesVisited(){
-      _currentIndex >= _Filelines.size();
+      return _currentIndex >= _Filelines.size()-1;
+    }
+    int fileSize(){
+      return _Filelines.size();
+    }
+    int getIndex(){
+      return _currentIndex;
     }
 };
 
