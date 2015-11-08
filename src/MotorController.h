@@ -11,14 +11,14 @@ class MotorController{
   private:
     void openSerial();
     serialib serial;
-  	Conf configuration;
+    Conf configuration;
   public:
-  	MotorController(Conf c);
-  	void commandStop();
-  	void commandStraight();
-  	void commandTurn(int turn);
-  	void commandForward(int throttle);
-  	void commandBackward(int throttle);
+    MotorController(Conf c);
+    void commandStop();
+    void commandStraight();
+    void commandTurn(int turn);
+    void commandForward(int throttle);
+    void commandBackward(int throttle);
 };
 
 #endif
