@@ -5,7 +5,9 @@ void Pathfinding::readAllInQueue(){
     char* out_charp;
     unsigned int stop_throwing_warnings = 128;
     Pathfinding::serial.ReadString(out_charp,'$',stop_throwing_warnings);
-    Pathfinding::parseReadingAndInsertIntoReadings(out_charp);
+    if (out_charp){
+      Pathfinding::parseReadingAndInsertIntoReadings(out_charp);
+    }
   }
 }
 void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){

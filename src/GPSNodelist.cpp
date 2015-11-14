@@ -15,12 +15,12 @@ string GPSNodelist::getNextNodeString() {
 	if (_currentIndex < _Filelines.size())
 	{
 		nextNode = _Filelines.at(_currentIndex);
+		_currentIndex += 1;
 	}
 	else
 	{
 		nextNode = "END_OF_FILE";
 	}
-	_currentIndex += 1;
 	return nextNode;
 }
 
