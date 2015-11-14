@@ -15,8 +15,8 @@
     "logger_dispatch":{
         "port":"tty/USB0",
         "baud":9600
-    }
+    },
     "nodelist": {
-        "file":"./nodes/"
+        "file":"./nodes"
     }
 }

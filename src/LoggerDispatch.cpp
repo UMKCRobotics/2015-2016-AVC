@@ -18,14 +18,13 @@ char LoggerDispatch::levelToChar(el::Level level){
 
 void LoggerDispatch::handle(const el::LogDispatchData* data){
     //Precede the message with a level indicator for led
-    char beginChar = levelToChar(data->logMessage()->level());
-    string outString = beginChar + data->logMessage()->message() + '\n';
-    //serial.WriteString(outString.c_str());
-    cout << outString;
+    har beginChar = levelToChar(data->logMessage()->level());
+    string outString = beginChar + data->logMessage()->logger()->id()+ data->logMessage()->message() + '\n';
+    serial.WriteString(outString.c_str());
 }
 
 LoggerDispatch::LoggerDispatch(){
-  //serial.Open(LoggerDispatchGlobals::port.c_str(),LoggerDispatchGlobals::baud);
+  serial.Open(LoggerDispatchGlobals::port.c_str(),LoggerDispatchGlobals::baud);
 }
 
 namespace LoggerDispatchGlobals {

@@ -22,9 +22,9 @@ int main(int argv, char* argc[]){
 
   LoggerDispatchGlobals::setConfiguration(conf);
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
-
-  LOG(INFO) << "started program";
-
+  while(true){
+    LOG(INFO) << "started program";
+  }
   GPS gps(conf);
   Pathfinding pathfinding(conf);
   GPSNodelist nodelist(conf);
