@@ -18,7 +18,7 @@ char LoggerDispatch::levelToChar(el::Level level){
 
 void LoggerDispatch::handle(const el::LogDispatchData* data){
     //Precede the message with a level indicator for led
-    har beginChar = levelToChar(data->logMessage()->level());
+    char beginChar = levelToChar(data->logMessage()->level());
     string outString = beginChar + data->logMessage()->logger()->id()+ data->logMessage()->message() + '\n';
     serial.WriteString(outString.c_str());
 }
