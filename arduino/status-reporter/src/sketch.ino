@@ -24,13 +24,10 @@ void setup()
 
 void loop()
 {
-  //Serial.println("Is this working?");
 	if(Serial.available() > 0)
 	{
-               // Serial.println("Is this working?");
 		String inputSerial = Serial.readString();
 		String inputNoVowels;
-           //  String inputSerial = "wIs Working";
 		char code = inputSerial[0];
    
                Serial.println(code);
@@ -39,7 +36,6 @@ void loop()
 			digitalWrite(greenpin, HIGH);
                         digitalWrite(yellowpin, LOW);
                         digitalWrite(redpin, LOW);
-                        //Serial.println(inputSerial);
 		}
                 else if (code == 'w')
                 {
@@ -53,7 +49,6 @@ void loop()
                         digitalWrite(greenpin, LOW);
                         digitalWrite(yellowpin, LOW);
 		}	
-		int count = 0;
 
 		for(int i = 0; i <inputSerial.length(); i++)
 		{
@@ -62,7 +57,6 @@ void loop()
 			else
 			{
 				inputNoVowels += inputSerial[i];
-				count++;
 			}
 		}
 
