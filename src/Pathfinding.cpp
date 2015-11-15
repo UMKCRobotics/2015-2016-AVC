@@ -20,7 +20,7 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
         CLOG(ERROR,"pathfinding") << "error while reading the byte";
         break;
       default:
-        CLOG(ERROR,"pathfinding") << "unkown serial error 2003";
+        CLOG(ERROR,"pathfinding") << "unkown serial error 2003, so emotional";
         break;
       }
     }
@@ -45,7 +45,7 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
         CLOG(ERROR,"pathfinding") << "error while reading the byte";
         break;
       default:
-        CLOG(ERROR,"pathfinding") << "unkown serial error 2003";
+        CLOG(ERROR,"pathfinding") << "unkown serial error 2003, pls alert yung lean :(";
         break;
       }
     }
@@ -56,56 +56,81 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
       break;
     }
   }
-  double direction,distance;
+  Angle direction;
+  Distance distance;
   direction = stoi(s_key);
   distance = stoi(s_value);
-  int rayMax = configuration.data["pathfinding"]["ray_maximum"];
   readings[direction] = (distance >= rayMax)? rayMax : distance;
   CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
 }
 
-double Pathfinding::bestAvailableHeading(double desiredHeading){
-  double best_heading = -1;
+Angle Pathfinding::bestAvailableHeading(Angle desiredHeading){
+  Angle best_heading = -1;
   double best_heuristic = -1;
+  ReadingContainer used_reading;
   if(configuration.data["pathfinding"]["perform_growth"]){
-    unordered_map<int,int> grown_readings = performObstactleGrowth();
-    for(auto it = grown_readings.begin(); it != grown_readings.end();++it){
-        double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
-        if(heuristic_value > best_heading){
-          best_heading = heuristic_value;
-        }
-    }
+    used_reading = performObstactleGrowth();
   }
   else{
-    for(auto it = readings.begin(); it != readings.end();++it){
+    used_reading = readings;
+  }
+  for(auto it = used_reading.begin(); it != used_reading.end();++it){
         double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
         if(heuristic_value > best_heuristic || best_heuristic == -1){
           best_heading = it->first;
           best_heuristic = heuristic_value;
         }
-    }
   }
-  CLOG(INFO,"pathfinding") << "best" << best_heading;
+  CLOG(INFO,"pathfinding") << "Computed best heading: " << best_heading;
   return best_heading;
 }
 
-unordered_map<int,int> Pathfinding::performObstactleGrowth(){
-  unordered_map<int,int> newMap (readings);
-  bool rayMax = configuration.data["pathfinding"]["ray_maximum"];
-  double safeLength = configuration.data["pathfinding"]["safe_length"];
-  for(auto ray = Pathfinding::readings.begin(); ray != Pathfinding::readings.end(); ++ray){
-    for(auto other_ray = Pathfinding::readings.begin(); other_ray != Pathfinding::readings.end(); ++other_ray){ 
-      if(other_ray->second <= rayMax){
-        double beta = abs(atan2(safeLength/2,other_ray->second));
-        double angle_between_two_rays = abs(AngleMath::angleBetweenTwoAngles(ray->first,other_ray->first));
-        if(angle_between_two_rays < beta){
-            double v = other_ray->second - safeLength/2;
-            newMap[ray->first] = v;
-        }
+ReadingContainer Pathfinding::performObstactleGrowth(){
+  ReadingContainer newMap (readings); //copy the current readings
+  Distance leftRayDistance = -1;
+  Angle leftRayAngle = -1;
+  Distance rightRayDistance = -1;
+  Angle rightRayAngle = -1;
+  for(auto ray = readings.begin(); ray != readings.end(); ++ray){
+    Distance outDistance = -1;
+    //try to find a right ray
+    auto rightRay =  ++ray;
+    if(rightRay != readings.end()){ //there is a right ray
+      rightRayAngle = rightRay->first;
+      rightRayDistance = rightRay->second;
+    }
+    //check left
+    if(leftRayAngle != -1 && leftRayDistance != -1){ //there is a left ray
+      outDistance = computeGrowthLength(ray->first,ray->second,leftRayAngle,leftRayDistance);
+    }
+    //check right
+    if(rightRayAngle != -1 && rightRayDistance != -1){ //there is a left ray
+      Distance rightDistance;
+      rightDistance = computeGrowthLength(ray->first,ray->second,rightRayAngle,rightRayDistance);
+      if(rightDistance < outDistance || outDistance == -1){
+        outDistance = rightDistance;
       }
     }
+    leftRayAngle = ray->first; //change the left to the current one
+    leftRayDistance = ray->second;
+    if(outDistance != -1){ //if it was shruneken at some point
+      newMap[ray->first] = outDistance;
+    }
+    
   }
   return newMap;
+}
+
+Distance Pathfinding::computeGrowthLength(Angle sourceAngle, Distance sourceDistance, Angle otherAngle, Distance otherDistance){
+    if(otherDistance <= rayMax){
+        double beta = abs(atan2(safeLength/2,otherAngle));
+        double angle_between_two_rays = abs(AngleMath::angleBetweenTwoAngles(sourceAngle,otherAngle));
+        if(angle_between_two_rays < beta){
+            Distance v = otherDistance - safeLength/2;
+            return v;
+        }
+    }
+    return sourceDistance;
 }
 
 double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int rayDistance){
@@ -156,6 +181,8 @@ void Pathfinding::openSerial(){
 }
 Pathfinding::Pathfinding(Conf c){
   configuration = c;
+  safeLength = configuration.data["pathfinding"]["safe_length"];
+  rayMax = configuration.data["pathfinding"]["ray_maximum"];
   threadContinue = true;
   pathfinding_serial_thread = thread([this]{
       openSerial();

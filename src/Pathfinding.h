@@ -9,29 +9,33 @@
 #include "Conf.hpp"
 
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <cmath>
 #include <thread>
 #include <stdlib.h>
 
 using namespace std;
 
-#define MAX_SERIAL_LENGTH 10000000000
+typedef int Angle;
+typedef int Distance;
+typedef map<Angle,Distance> ReadingContainer;
 
 class Pathfinding {
  private:
   serialib serial;
-  unordered_map<int,int> readings; //key is direction, value is distance
+  ReadingContainer readings; //key is direction, value is distance
   void parseReadingAndInsertIntoReadings();
   thread pathfinding_serial_thread;
   void readAllInQueue();
   void openSerial();
-  unordered_map<int,int> performObstactleGrowth();
+  ReadingContainer performObstactleGrowth();
   bool threadContinue;
-
   Conf configuration;
+  Distance computeGrowthLength(Angle sourceAngle, Distance sourceDistance, Angle otherAngle, Distance otherDistance);
+  Distance rayMax;
+  Distance safeLength;
  public:
-    Pathfinding(Conf c);
+  Pathfinding(Conf c);
   ~Pathfinding();
   
   //Returns the best available heading based off of the algorithm 
@@ -39,12 +43,9 @@ class Pathfinding {
   //for each ray from the LIDAR, create a circle with radius a determined safe distance around anything less than a cutoff representing a 'safe area' near that object
   //Determine longest ray that is closest to desired heading using rayHeuristic
   //Return the heading of that ray as the new heading
-  double bestAvailableHeading(double desiredHeading);
+  Angle bestAvailableHeading(Angle desiredHeading);
 
   //Determine how favorable a ray is
-  //rayDistance may be inf if the ray is past cutoff
-  //rayHeuristic may return inf if ray is ultimately favorable (meaning we're heading towards it already and it's got infinite distance)
-  //Note: http://en.cppreference.com/w/cpp/types/numeric_limits/infinity
   double rayHeuristic(double desiredHeading, double rayHeading, int rayDistance);
 };
 #endif

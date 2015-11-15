@@ -11,6 +11,7 @@
 INITIALIZE_EASYLOGGINGPP
 
 int main(int argv, char* argc[]){
+
   Conf conf("./conf.json");
   
   //Setting up logging stuff
@@ -22,29 +23,24 @@ int main(int argv, char* argc[]){
   el::Loggers::getLogger("motorcontrol");
   el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
 
-  /*
   LoggerDispatchGlobals::setConfiguration(conf);
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
-  */
-  //GPS gps(conf);
-  //MotorController motor(conf);
+  GPS gps(conf);
+  MotorController motor(conf);
   Pathfinding pathfinding(conf);
   GPSNodelist nodelist(conf);
-  //gps.blockUntilFixed();
+  gps.blockUntilFixed();
   GPSNode node = nodelist.getNextNode();
   while(!nodelist.allNodesVisited()){
-    /*
     if(gps.isOverlapping(node)){
       node = nodelist.getNextNode();
     }
-    */
-    //    else{
-      //double desiredHeading = gps.calculateHeadingToNode(node); 
-      // double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
-    double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
-      //motor.commandTurn(bestPossibleHeading);
-      //motor.commandforward(25);
-      //}
+    else{
+      double desiredHeading = gps.calculateHeadingToNode(node); 
+      double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
+      motor.commandTurn(bestPossibleHeading);
+      motor.commandForward(25);
+    }
   }
 
   return 0;
