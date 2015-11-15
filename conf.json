@@ -14,14 +14,14 @@
         "add_degree_coefficient": false
     },
     "logger_dispatch":{
-        "port":"tty/USB0",
-        "baud":9600
+        "port":"/dev/arduino_logger",
+        "baud": 9600
     },
     "nodelist": {
         "file":"./nodes"
     },
     "motorcontroller": {
-        "port": "arduino_motorcontroller",
+        "port": "/dev/arduino_motorcontroller",
         "baud": 57600
     }
 }
