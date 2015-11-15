@@ -12,6 +12,10 @@
         "perform_growth" : true,
         "add_degree_coefficient": true
     },
+    "logger_dispatch":{
+        "port":"tty/USB0",
+        "baud":9600
+    },
     "nodelist": {
         "file":"./nodes"
     },

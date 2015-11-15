@@ -4,6 +4,7 @@
 #include "GPSNodelist.h"
 #include "MotorController.h"
 #include "Conf.hpp"
+#include "LoggerDispatch.h"
 
 #include <string>
 
@@ -21,8 +22,11 @@ int main(int argv, char* argc[]){
   el::Loggers::getLogger("motorcontrol");
   el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
 
-  LOG(INFO) << "started program";
-
+  LoggerDispatchGlobals::setConfiguration(conf);
+  el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
+  while(true){
+    LOG(INFO) << "started program";
+  }
   GPS gps(conf);
   MotorController motor(conf);
   Pathfinding pathfinding(conf);
