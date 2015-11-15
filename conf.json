@@ -1,12 +1,12 @@
 {
     "logfile": "./logs/log",
     "gps": {
-        "port": "/dev/ttyUSB0",
+        "port": "/dev/gps_avc",
         "baud": 38400,
         "min_overlap_dist": .01
     },
     "pathfinding":{
-        "port": "/dev/ttyACM0",
+        "port": "/dev/arduino_pathfinding",
         "baud": 9600,
         "safe_length": 10,
         "ray_maximum": 100,
@@ -21,7 +21,7 @@
         "file":"./nodes"
     },
     "motorcontroller": {
-        "port": "/dev/ttyACM1",
+        "port": "arduino_motorcontroller",
         "baud": 57600
     }
 }
