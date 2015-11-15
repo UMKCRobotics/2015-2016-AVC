@@ -13,6 +13,7 @@
 #include <cmath>
 #include <thread>
 #include <stdlib.h>
+#include <stdexcept>
 
 using namespace std;
 
@@ -38,7 +39,7 @@ class Pathfinding {
   Pathfinding(Conf c);
   ~Pathfinding();
   
-  //Returns the best available heading based off of the algorithm 
+  //Returns the best available heading based off of the algorithm
   //Algorithm
   //for each ray from the LIDAR, create a circle with radius a determined safe distance around anything less than a cutoff representing a 'safe area' near that object
   //Determine longest ray that is closest to desired heading using rayHeuristic

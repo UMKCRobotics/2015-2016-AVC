@@ -58,10 +58,14 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
   }
   Angle direction;
   Distance distance;
-  direction = stoi(s_key);
-  distance = stoi(s_value);
-  readings[direction] = (distance >= rayMax)? rayMax : distance;
-  CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
+  try{
+    direction = stoi(s_key);
+    distance = stoi(s_value);
+    readings[direction] = (distance >= rayMax)? rayMax : distance;
+    CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
+  }catch(const invalid_argument& e){
+    CLOG(ERROR,"pathfinding") << "Bad conversion to number: " << s_key << " " << s_value;
+  }
 }
 
 Angle Pathfinding::bestAvailableHeading(Angle desiredHeading){

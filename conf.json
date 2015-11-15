@@ -2,7 +2,8 @@
     "logfile": "./logs/log",
     "gps": {
         "port": "/dev/ttyUSB0",
-        "baud": 38400
+        "baud": 38400,
+        "min_overlap_dist": .01
     },
     "pathfinding":{
         "port": "/dev/ttyACM0",

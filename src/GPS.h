@@ -24,6 +24,7 @@ class GPS{
   bool threadContinue;
   string PORT;
   unsigned int BAUD;
+  long double min_overlap_distance;
  public:
   GPSInfo info;
   //Given our current heading, calculate in radians what we'd like our heading to be 
@@ -33,10 +34,7 @@ class GPS{
   static double calculateAngleToNode(GPSNode current, GPSNode desired);
   void blockUntilFixed();
   
-  bool isOverlapping(GPSNode node){ 
-    //todo implement
-    return true;
-  }
+  bool isOverlapping(GPSNode node);
   
   void logCurrentInfo();
 
