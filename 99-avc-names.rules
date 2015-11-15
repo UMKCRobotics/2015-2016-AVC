@@ -1,0 +1,5 @@
+SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_motorcontroller"
+
+SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_pathfinding"
+
+SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="gps_avc"
