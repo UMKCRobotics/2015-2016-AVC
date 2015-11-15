@@ -21,12 +21,12 @@ using namespace std;
 class Pathfinding {
  private:
   serialib serial;
-  unordered_map<double,double> readings; //key is direction, value is distance
-  void parseReadingAndInsertIntoReadings(string);
+  unordered_map<int,int> readings; //key is direction, value is distance
+  void parseReadingAndInsertIntoReadings();
   thread pathfinding_serial_thread;
   void readAllInQueue();
   void openSerial();
-  unordered_map<double,double> performObstactleGrowth();
+  unordered_map<int,int> performObstactleGrowth();
   bool threadContinue;
 
   Conf configuration;
@@ -45,6 +45,6 @@ class Pathfinding {
   //rayDistance may be inf if the ray is past cutoff
   //rayHeuristic may return inf if ray is ultimately favorable (meaning we're heading towards it already and it's got infinite distance)
   //Note: http://en.cppreference.com/w/cpp/types/numeric_limits/infinity
-  double rayHeuristic(double desiredHeading, double rayHeading, double rayDistance);
+  double rayHeuristic(double desiredHeading, double rayHeading, int rayDistance);
 };
 #endif

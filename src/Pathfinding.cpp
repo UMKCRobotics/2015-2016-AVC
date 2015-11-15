@@ -1,38 +1,74 @@
 #include "Pathfinding.h"
 
 void Pathfinding::readAllInQueue(){
-  while(Pathfinding::serial.Peek() != 0){
-    char* out_charp;
-    unsigned int stop_throwing_warnings = 128;
-    Pathfinding::serial.ReadString(out_charp,'$',stop_throwing_warnings);
-    if (out_charp){
-      Pathfinding::parseReadingAndInsertIntoReadings(out_charp);
+    parseReadingAndInsertIntoReadings();
+}
+void Pathfinding::parseReadingAndInsertIntoReadings(){
+  char out_char = ' ';
+  string s_key, s_value;
+  while(true){
+    char code = serial.ReadChar(&out_char); //add error reporting
+    if(code < 0){
+      switch(code){
+      case 0:
+        CLOG(ERROR,"pathfinding")  << "timeout reached in serial read";
+        break;
+      case -1:
+        CLOG(ERROR,"pathfinding") << "erorr while setting the timeout";
+        break;
+      case -2:
+        CLOG(ERROR,"pathfinding") << "error while reading the byte";
+        break;
+      default:
+        CLOG(ERROR,"pathfinding") << "unkown serial error 2003";
+        break;
+      }
+    }
+    else if(out_char != ','){
+      s_key += out_char;
+    }
+    else{
+      break;
     }
   }
-}
-void Pathfinding::parseReadingAndInsertIntoReadings(string out_string){
-  CLOG(INFO,"pathfinding") << "trying to parse" << out_string;
-  string s_key,s_value;
-  int i =0;
-  while(out_string[i] != ','){
-    s_key += out_string[i];
-    ++i;
-  }
-  while(out_string[i] != '$'){
-    s_value += out_string[i];
-    ++i;
+  while(true){
+    char code =serial.ReadChar(&out_char); //add error reporting
+    if(code < 0){
+      switch(code){
+      case 0:
+        CLOG(ERROR,"pathfinding")  << "timeout reached in serial read";
+        break;
+      case -1:
+        CLOG(ERROR,"pathfinding") << "erorr while setting the timeout";
+        break;
+      case -2:
+        CLOG(ERROR,"pathfinding") << "error while reading the byte";
+        break;
+      default:
+        CLOG(ERROR,"pathfinding") << "unkown serial error 2003";
+        break;
+      }
+    }
+    else if(out_char != '$'){
+      s_value += out_char;
+    }
+    else{
+      break;
+    }
   }
   double direction,distance;
-  direction = stod(s_key);
-  distance = stod(s_value);
-  bool rayMax = configuration.data["pathfinding"]["ray_maximum"];
+  direction = stoi(s_key);
+  distance = stoi(s_value);
+  int rayMax = configuration.data["pathfinding"]["ray_maximum"];
   readings[direction] = (distance >= rayMax)? rayMax : distance;
+  CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
 }
 
 double Pathfinding::bestAvailableHeading(double desiredHeading){
   double best_heading = -1;
+  double best_heuristic = -1;
   if(configuration.data["pathfinding"]["perform_growth"]){
-    unordered_map<double,double> grown_readings = performObstactleGrowth();
+    unordered_map<int,int> grown_readings = performObstactleGrowth();
     for(auto it = grown_readings.begin(); it != grown_readings.end();++it){
         double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
         if(heuristic_value > best_heading){
@@ -43,8 +79,9 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
   else{
     for(auto it = readings.begin(); it != readings.end();++it){
         double heuristic_value = rayHeuristic(desiredHeading,it->first,it->second);
-        if(heuristic_value > best_heading){
-          best_heading = heuristic_value;
+        if(heuristic_value > best_heuristic || best_heuristic == -1){
+          best_heading = it->first;
+          best_heuristic = heuristic_value;
         }
     }
   }
@@ -52,8 +89,8 @@ double Pathfinding::bestAvailableHeading(double desiredHeading){
   return best_heading;
 }
 
-unordered_map<double,double> Pathfinding::performObstactleGrowth(){
-  unordered_map<double,double> newMap (readings);
+unordered_map<int,int> Pathfinding::performObstactleGrowth(){
+  unordered_map<int,int> newMap (readings);
   bool rayMax = configuration.data["pathfinding"]["ray_maximum"];
   double safeLength = configuration.data["pathfinding"]["safe_length"];
   for(auto ray = Pathfinding::readings.begin(); ray != Pathfinding::readings.end(); ++ray){
@@ -71,7 +108,7 @@ unordered_map<double,double> Pathfinding::performObstactleGrowth(){
   return newMap;
 }
 
-double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, double rayDistance){
+double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int rayDistance){
   //took absolute value -- 
   double deviationHeading = abs(AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading));
   double inverseDev;
@@ -79,7 +116,7 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, doubl
     inverseDev = 1;
    }
   else{
-    double inverseDev = (1/deviationHeading);
+    inverseDev = (1/deviationHeading);
   }
   if(configuration.data["pathfinding"]["add_degree_coefficient"]){return rayDistance*inverseDev*(desiredHeading/60);}//60 should be sweep angle
   return rayDistance*inverseDev;
@@ -89,6 +126,7 @@ void Pathfinding::openSerial(){
   string port = configuration.data["pathfinding"]["port"].get<string>();
   int baud = configuration.data["pathfinding"]["baud"];
   char status = serial.Open(port.c_str(),baud);
+  serial.FlushReceiver();
   switch (status){
   case 1:
     CLOG(INFO,"pathfinding") << "Serial opened successfully";

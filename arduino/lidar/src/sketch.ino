@@ -20,7 +20,7 @@ int degree = 180;
 
 void setup()
 {
-  Serial.begin(115200); // Start serial communications
+  Serial.begin(9600); // Start serial communications
   pinMode(2, OUTPUT); // Set pin 2 as trigger pin
   pinMode(3, INPUT); // Set pin 3 as monitor pin
   digitalWrite(2, LOW); // Set trigger LOW for continuous read
@@ -52,7 +52,7 @@ void scan()
   
   if(pulse_width != 0){ // If we get a reading that isn't zero, let's print it
         pulse_width = pulse_width/10; // 10usec = 1 cm of distance for LIDAR-Lite
-        String send_string = String(degree) + "," + String(pulse_width) + "$";
+        String send_string = String(degree-90) + "," + String(pulse_width) + "$";
   	Serial.print(send_string); // Print the distance
   }
 }

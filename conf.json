@@ -6,11 +6,11 @@
     },
     "pathfinding":{
         "port": "/dev/ttyACM0",
-        "baud": 115200,
+        "baud": 9600,
         "safe_length": 10,
         "ray_maximum": 100,
-        "perform_growth" : true,
-        "add_degree_coefficient": true
+        "perform_growth" : false,
+        "add_degree_coefficient": false
     },
     "logger_dispatch":{
         "port":"tty/USB0",
