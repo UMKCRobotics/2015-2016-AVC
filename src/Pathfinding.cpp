@@ -62,7 +62,7 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
     direction = stoi(s_key);
     distance = stoi(s_value);
     readings[direction] = (distance >= rayMax)? rayMax : distance;
-    CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
+    //CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
   }catch(const invalid_argument& e){
     CLOG(ERROR,"pathfinding") << "Bad conversion to number: " << s_key << " " << s_value;
   }
@@ -95,13 +95,23 @@ ReadingContainer Pathfinding::performObstactleGrowth(){
   Angle leftRayAngle = -1;
   Distance rightRayDistance = -1;
   Angle rightRayAngle = -1;
-  for(auto ray = readings.begin(); ray != readings.end(); ++ray){
-    Distance outDistance = -1;
+  bool first = true;
+  for(auto ray = newMap.begin(); ray != newMap.end(); ++ray){
+    leftRayDistance = -1;
+    leftRayAngle = -1;
+    rightRayDistance = -1;
+    rightRayAngle = -1;
+    Distance outDistance = ray->second;
     //try to find a right ray
-    auto rightRay =  ++ray;
+    auto rightRay =  *(&ray + 1);
     if(rightRay != readings.end()){ //there is a right ray
       rightRayAngle = rightRay->first;
       rightRayDistance = rightRay->second;
+    }
+    if (!first){
+      auto leftRay = *(&ray - 1);
+      leftRayAngle = leftRay->first;
+      leftRayDistance = leftRay->second;
     }
     //check left
     if(leftRayAngle != -1 && leftRayDistance != -1){ //there is a left ray
@@ -117,9 +127,7 @@ ReadingContainer Pathfinding::performObstactleGrowth(){
     }
     leftRayAngle = ray->first; //change the left to the current one
     leftRayDistance = ray->second;
-    if(outDistance != -1){ //if it was shruneken at some point
-      newMap[ray->first] = outDistance;
-    }
+    newMap[ray->first] = outDistance;
     
   }
   return newMap;
@@ -139,6 +147,9 @@ Distance Pathfinding::computeGrowthLength(Angle sourceAngle, Distance sourceDist
 
 double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int rayDistance){
   //took absolute value -- 
+  if(rayDistance < safeLength){
+    return 0;
+  }
   double deviationHeading = abs(AngleMath::angleBetweenTwoAngles(desiredHeading,rayHeading));
   double inverseDev;
   if(deviationHeading == 0){
@@ -147,7 +158,7 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int r
   else{
     inverseDev = (1/deviationHeading);
   }
-  if(configuration.data["pathfinding"]["add_degree_coefficient"]){return rayDistance*inverseDev*(desiredHeading/60);}//60 should be sweep angle
+  //if(configuration.data["pathfinding"]["add_degree_coefficient"]){return rayDistance*inverseDev*(desiredHeading/60);}//60 should be sweep angle
   return rayDistance*inverseDev;
 }
 
@@ -183,6 +194,11 @@ void Pathfinding::openSerial(){
     break;
   }
 }
+Pathfinding::Pathfinding(){
+  ///Only used for mocking
+  safeLength = 100;
+  rayMax = 100;
+}
 Pathfinding::Pathfinding(Conf c){
   configuration = c;
   safeLength = configuration.data["pathfinding"]["safe_length"];
@@ -202,15 +218,38 @@ Pathfinding::~Pathfinding(){
 }
 
 string Pathfinding::prettyPrint(){
-  string output;
+  stringstream output;
   int max = configuration.data["pathfinding"]["ray_maximum"];
   for(auto it = readings.begin(); it != readings.end();++it){
-    output += it->first;
-    int percent = it->second / max;
-    for(int i = 0; i < percent; ++i){
-      output += "|";
+    output << it->first;
+    double percent = (it->second / ((double)max)) * 100;
+    int rounded_percent = round(percent);
+    for(int i = 0; i < rounded_percent; ++i){
+      output << "|";
     }
-    output += "\n";
+    output << "\n";
   }
-  return output;
+  return output.str();
+}
+string Pathfinding::prettyPrintWithHeuristicValues(Angle desiredHeading){
+  stringstream output;
+  int max = configuration.data["pathfinding"]["ray_maximum"];
+  Angle bestHeading = bestAvailableHeading(desiredHeading);
+  for(auto it = readings.begin(); it != readings.end();++it){
+    double heuristic = rayHeuristic(desiredHeading,it->first,it->second);
+    output << it->first;
+    double percent = (it->second / ((double)max)) * 100;
+    int rounded_percent = round(percent);
+    double h_percent = (heuristic / ((double)max)) * 100;
+    int heuristic_rounded_percent = round(h_percent);
+    output << "\033[0;31m";
+    for(int i = 1; i <= rounded_percent; ++i){
+      output << "|";
+      if(i >= heuristic_rounded_percent){
+        output << "\033[0;37m";
+      }
+    }
+    output << "R: " << it->second << ", H: "<< heuristic << ((bestHeading == it->first)? " ***" : "")<<"\n";
+  }
+  return output.str();
 }

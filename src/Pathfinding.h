@@ -14,6 +14,7 @@
 #include <thread>
 #include <stdlib.h>
 #include <stdexcept>
+#include <sstream>
 
 using namespace std;
 
@@ -37,7 +38,10 @@ class Pathfinding {
   Distance safeLength;
  public:
   string prettyPrint();
-    Pathfinding(Conf c);
+  string prettyPrintWithHeuristicValues(Angle desiredHeading);
+  string prettyPrintHeuristics(Angle desiredAngle);
+  Pathfinding();
+  Pathfinding(Conf c);
   ~Pathfinding();
   
   //Returns the best available heading based off of the algorithm

@@ -41,10 +41,11 @@ TEST_CASE("GPS calcuatedesired heading",""){
   REQUIRE(-180 == GPS::calculateDesiredHeading(180,GPSNode(0,0),GPSNode(0,1)));
 }
 TEST_CASE("Pathfinding","ray heuristic"){
-  REQUIRE(1 == Pathfinding::rayHeuristic(0,0,1));
-  REQUIRE(1 == Pathfinding::rayHeuristic(45,0,1));
-  REQUIRE(1 == Pathfinding::rayHeuristic(0,45,1));
-  REQUIRE(1 == Pathfinding::rayHeuristic(0,241,1));
+  Pathfinding pathfinding;
+  REQUIRE(1 == pathfinding.rayHeuristic(0,0,1));
+  REQUIRE(1 == pathfinding.rayHeuristic(45,0,1));
+  REQUIRE(1 == pathfinding.rayHeuristic(0,45,1));
+  REQUIRE(1 == pathfinding.rayHeuristic(0,241,1));
 }
 
 TEST_CASE("PARSER","vtg parser"){

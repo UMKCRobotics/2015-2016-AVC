@@ -3,14 +3,14 @@
     "gps": {
         "port": "/dev/gps_avc",
         "baud": 38400,
-        "min_overlap_dist": .01
+        "min_overlap_dist": 0.1
     },
     "pathfinding":{
-        "port": "/dev/arduino_pathfinding",
-        "baud": 9600,
-        "safe_length": 10,
-        "ray_maximum": 100,
-        "perform_growth" : false,
+        "port": "/dev/ttyACM0",
+        "baud": 115200,
+        "safe_length": 62,
+        "ray_maximum": 300,
+        "perform_growth" : true,
         "add_degree_coefficient": false
     },
     "logger_dispatch":{

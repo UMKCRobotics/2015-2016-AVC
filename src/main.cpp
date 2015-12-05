@@ -5,6 +5,7 @@
 #include "MotorController.h"
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
+#include <unistd.h>
 
 #include <string>
 
@@ -18,29 +19,32 @@ int main(int argv, char* argc[]){
   el::Configurations loggingConf;
   loggingConf.setToDefault();
   loggingConf.set(el::Level::Global, el::ConfigurationType::Filename, conf.data["logfile"].get<string>());
-  el::Loggers::getLogger("gps");
+  //el::Loggers::getLogger("gps");
   el::Loggers::getLogger("pathfinding");
-  el::Loggers::getLogger("motorcontrol");
+  //el::Loggers::getLogger("motorcontrol");
   el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
 
-  LoggerDispatchGlobals::setConfiguration(conf);
-  el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
-  GPS gps(conf);
-  MotorController motor(conf);
+  //LoggerDispatchGlobals::setConfiguration(conf);
+  //el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
+  //GPS gps(conf);
+  //MotorController motor(conf);
   Pathfinding pathfinding(conf);
-  GPSNodelist nodelist(conf);
-  gps.blockUntilFixed();
-  GPSNode node = nodelist.getNextNode();
-  while(!nodelist.allNodesVisited()){
-    if(gps.isOverlapping(node)){
-      node = nodelist.getNextNode();
-    }
-    else{
-      double desiredHeading = gps.calculateHeadingToNode(node); 
-      double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
-      motor.commandTurn(bestPossibleHeading);
-      motor.commandForward(25);
-    }
+//GPSNodelist nodelist(conf);
+  // gps.blockUntilFixed();
+  //GPSNode node = nodelist.getNextNode();
+  //while(!nodelist.allNodesVisited()){
+  // if(gps.isOverlapping(node)){
+  //   node = nodelist.getNextNode();
+  // }
+  // else{
+  //   double desiredHeading = gps.calculateHeadingToNode(node); 
+  //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
+  //   motor.commandTurn(bestPossibleHeading);
+  while(true){
+       double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
+       LOG(INFO) << "Best Heading: " << bestPossibleHeading;
+       LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
+       sleep(5);
   }
 
   return 0;
