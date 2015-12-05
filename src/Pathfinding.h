@@ -31,6 +31,7 @@ class Pathfinding {
 
   Conf configuration;
  public:
+  string prettyPrint();
     Pathfinding(Conf c);
   ~Pathfinding();
   

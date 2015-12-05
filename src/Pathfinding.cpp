@@ -169,3 +169,17 @@ Pathfinding::~Pathfinding(){
   pathfinding_serial_thread.join();
   serial.Close();
 }
+
+string Pathfinding::prettyPrint(){
+  string output;
+  int max = configuration.data["pathfinding"]["ray_maximum"];
+  for(auto it = readings.begin(); it != readings.end();++it){
+    output += it->first;
+    int percent = it->second / max;
+    for(int i = 0; i < percent; ++i){
+      output += "|";
+    }
+    output += "\n";
+  }
+  return output;
+}
