@@ -16,6 +16,7 @@ namespace LoggerDispatchGlobals{ //hacky shit to make this work
 class LoggerDispatch : public el::LogDispatchCallback{
  private:
   serialib serial;
+  bool hasBeenInitialized;
  public:
   LoggerDispatch();
 

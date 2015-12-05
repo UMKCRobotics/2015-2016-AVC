@@ -56,6 +56,7 @@ void GPS::logCurrentInfo(){
 GPS::GPS(Conf c){
   PORT = c.data["gps"]["port"].get<string>();
   BAUD = c.data["gps"]["baud"];
+  min_overlap_distance = c.data["gps"]["min_overlap_dist"].get<long double>();
   threadContinue = true;
   gps_serial_thread = thread([this]{
       openSerial();
@@ -105,4 +106,9 @@ void GPS::blockUntilFixed(){
     while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
       CLOG_EVERY_N(10,INFO,"gps") << "Waiting on fix...";
    }
+}
+
+bool GPS::isOverlapping(GPSNode node){
+  long double euclideanDist = sqrt(pow(info.node.latitude - node.latitude,2) + pow(info.node.longitude - node.longitude,2));
+  return euclideanDist < min_overlap_distance;
 }
