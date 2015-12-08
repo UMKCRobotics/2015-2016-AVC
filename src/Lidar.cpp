@@ -1,9 +1,9 @@
-#include "Pathfinding.h"
+#include "Lidar.h"
 
-void Pathfinding::readAllInQueue(){
+void Lidar::readAllInQueue(){
     parseReadingAndInsertIntoReadings();
 }
-void Pathfinding::parseReadingAndInsertIntoReadings(){
+void Lidar::parseReadingAndInsertIntoReadings(){
   char out_char = ' ';
   string s_key, s_value;
   while(true){
@@ -11,16 +11,16 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
     if(code < 0){
       switch(code){
       case 0:
-        CLOG(ERROR,"pathfinding")  << "timeout reached in serial read";
+        CLOG(ERROR,"lidar")  << "timeout reached in serial read";
         break;
       case -1:
-        CLOG(ERROR,"pathfinding") << "erorr while setting the timeout";
+        CLOG(ERROR,"lidar") << "erorr while setting the timeout";
         break;
       case -2:
-        CLOG(ERROR,"pathfinding") << "error while reading the byte";
+        CLOG(ERROR,"lidar") << "error while reading the byte";
         break;
       default:
-        CLOG(ERROR,"pathfinding") << "unkown serial error 2003, so emotional";
+        CLOG(ERROR,"lidar") << "unkown serial error 2003, so emotional";
         break;
       }
     }
@@ -36,16 +36,16 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
     if(code < 0){
       switch(code){
       case 0:
-        CLOG(ERROR,"pathfinding")  << "timeout reached in serial read";
+        CLOG(ERROR,"lidar")  << "timeout reached in serial read";
         break;
       case -1:
-        CLOG(ERROR,"pathfinding") << "erorr while setting the timeout";
+        CLOG(ERROR,"lidar") << "erorr while setting the timeout";
         break;
       case -2:
-        CLOG(ERROR,"pathfinding") << "error while reading the byte";
+        CLOG(ERROR,"lidar") << "error while reading the byte";
         break;
       default:
-        CLOG(ERROR,"pathfinding") << "unkown serial error 2003, pls alert yung lean :(";
+        CLOG(ERROR,"lidar") << "unkown serial error 2003, pls alert yung lean :(";
         break;
       }
     }
@@ -61,18 +61,21 @@ void Pathfinding::parseReadingAndInsertIntoReadings(){
   try{
     direction = stoi(s_key);
     distance = stoi(s_value);
+    if(direction > sweepAngle / 2) {
+      CLOG(WARNING, "lidar") << "Found angle outside sweep angle" << direction;
+    }
     readings[direction] = (distance >= rayMax)? rayMax : distance;
-    //CLOG(INFO,"pathfinding") << "Found Direction: " << direction << " and Distance: " << distance;
+    //CLOG(INFO,"lidar") << "Found Direction: " << direction << " and Distance: " << distance;
   }catch(const invalid_argument& e){
-    CLOG(ERROR,"pathfinding") << "Bad conversion to number: " << s_key << " " << s_value;
+    CLOG(WARNING,"lidar") << "Bad conversion to number: " << s_key << " " << s_value;
   }
 }
 
-Angle Pathfinding::bestAvailableHeading(Angle desiredHeading){
+Angle Lidar::bestAvailableHeading(Angle desiredHeading){
   Angle best_heading = -1;
   double best_heuristic = -1;
   ReadingContainer used_reading;
-  if(configuration.data["pathfinding"]["perform_growth"]){
+  if(configuration.data["pathfinding"]["lidar"]["perform_growth"]){
     used_reading = performObstactleGrowth();
   }
   else{
@@ -85,11 +88,11 @@ Angle Pathfinding::bestAvailableHeading(Angle desiredHeading){
           best_heuristic = heuristic_value;
         }
   }
-  CLOG(INFO,"pathfinding") << "Computed best heading: " << best_heading;
+  CLOG(INFO,"lidar") << "Computed best heading: " << best_heading;
   return best_heading;
 }
 
-ReadingContainer Pathfinding::performObstactleGrowth(){
+ReadingContainer Lidar::performObstactleGrowth(){
   ReadingContainer newMap (readings); //copy the current readings
   Distance leftRayDistance = -1;
   Angle leftRayAngle = -1;
@@ -133,7 +136,7 @@ ReadingContainer Pathfinding::performObstactleGrowth(){
   return newMap;
 }
 
-Distance Pathfinding::computeGrowthLength(Angle sourceAngle, Distance sourceDistance, Angle otherAngle, Distance otherDistance){
+Distance Lidar::computeGrowthLength(Angle sourceAngle, Distance sourceDistance, Angle otherAngle, Distance otherDistance){
     if(otherDistance <= rayMax){
         double beta = abs(atan2(safeLength/2,otherAngle));
         double angle_between_two_rays = abs(AngleMath::angleBetweenTwoAngles(sourceAngle,otherAngle));
@@ -145,7 +148,7 @@ Distance Pathfinding::computeGrowthLength(Angle sourceAngle, Distance sourceDist
     return sourceDistance;
 }
 
-double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int rayDistance){
+double Lidar::rayHeuristic(double desiredHeading, double rayHeading, int rayDistance){
   //took absolute value -- 
   if(rayDistance < safeLength){
     return 0;
@@ -162,47 +165,48 @@ double Pathfinding::rayHeuristic(double desiredHeading, double rayHeading, int r
   return rayDistance*inverseDev;
 }
 
-void Pathfinding::openSerial(){
-  string port = configuration.data["pathfinding"]["port"].get<string>();
-  int baud = configuration.data["pathfinding"]["baud"];
+void Lidar::openSerial(){
+  string port = configuration.data["pathfinding"]["lidar"]["port"].get<string>();
+  int baud = configuration.data["pathfinding"]["lidar"]["baud"];
   char status = serial.Open(port.c_str(),baud);
   serial.FlushReceiver();
   switch (status){
   case 1:
-    CLOG(INFO,"pathfinding") << "Serial opened successfully";
+    CLOG(INFO,"lidar") << "Serial opened successfully";
     break;
   case -1:
-    CLOG(FATAL,"pathfinding") << "Serial couldn't find device: " << port;
+    CLOG(FATAL,"lidar") << "Serial couldn't find device: " << port;
     break;
   case -2:
-    CLOG(FATAL,"pathfinding") << "Serial couldn't open device: " << port;
+    CLOG(FATAL,"lidar") << "Serial couldn't open device: " << port;
     break;
   case -3:
-    CLOG(FATAL,"pathfinding") << "Serial error while getting port params:" << port;
+    CLOG(FATAL,"lidar") << "Serial error while getting port params:" << port;
     break;
   case -4:
-    CLOG(FATAL,"pathfinding") << "Serial speed not recognized: " << baud;
+    CLOG(FATAL,"lidar") << "Serial speed not recognized: " << baud;
     break;
   case -5:
-    CLOG(FATAL,"pathfinding") << "Serial error while writing port parameters: " << port;
+    CLOG(FATAL,"lidar") << "Serial error while writing port parameters: " << port;
     break;
   case -6:
-    CLOG(FATAL,"pathfinding") << "Error while writing timeout parameters: " << port;
+    CLOG(FATAL,"lidar") << "Error while writing timeout parameters: " << port;
     break;
   default:
-    CLOG(FATAL,"pathfinding") << "Unkown error opening device" << status;
+    CLOG(FATAL,"lidar") << "Unkown error opening device" << status;
     break;
   }
 }
-Pathfinding::Pathfinding(){
+Lidar::Lidar(){
   ///Only used for mocking
   safeLength = 100;
   rayMax = 100;
 }
-Pathfinding::Pathfinding(Conf c){
+Lidar::Lidar(Conf c){
   configuration = c;
-  safeLength = configuration.data["pathfinding"]["safe_length"];
-  rayMax = configuration.data["pathfinding"]["ray_maximum"];
+  safeLength = configuration.data["pathfinding"]["lidar"]["safe_length"];
+  rayMax = configuration.data["pathfinding"]["lidar"]["ray_maximum"];
+  sweepAngle = configuration.data["pathfinding"]["lidar"]["sweep_angle"];
   threadContinue = true;
   pathfinding_serial_thread = thread([this]{
       openSerial();
@@ -211,15 +215,15 @@ Pathfinding::Pathfinding(Conf c){
       }
     });
 }
-Pathfinding::~Pathfinding(){
+Lidar::~Lidar(){
   threadContinue= false;
   pathfinding_serial_thread.join();
   serial.Close();
 }
 
-string Pathfinding::prettyPrint(){
+string Lidar::prettyPrint(){
   stringstream output;
-  int max = configuration.data["pathfinding"]["ray_maximum"];
+  int max = rayMax;
   for(auto it = readings.begin(); it != readings.end();++it){
     output << it->first;
     double percent = (it->second / ((double)max)) * 100;
@@ -231,9 +235,9 @@ string Pathfinding::prettyPrint(){
   }
   return output.str();
 }
-string Pathfinding::prettyPrintWithHeuristicValues(Angle desiredHeading){
+string Lidar::prettyPrintWithHeuristicValues(Angle desiredHeading){
   stringstream output;
-  int max = configuration.data["pathfinding"]["ray_maximum"];
+  int max = rayMax;
   Angle bestHeading = bestAvailableHeading(desiredHeading);
   for(auto it = readings.begin(); it != readings.end();++it){
     double heuristic = rayHeuristic(desiredHeading,it->first,it->second);

@@ -1,12 +1,13 @@
 
 
-#ifndef PATHFINDING_H
-#define PATHFINDING_H
+#ifndef LIDAR_H
+#define LIDAR_H
 
 #include "serial/serialib.h"
 #include "AngleMath.h"
 #include "logger.h"
 #include "Conf.hpp"
+#include "Pathfinder.h"
 
 #include <string>
 #include <map>
@@ -16,13 +17,11 @@
 #include <stdexcept>
 #include <sstream>
 
-using namespace std;
-
-typedef int Angle;
-typedef int Distance;
 typedef map<Angle,Distance> ReadingContainer;
 
-class Pathfinding {
+using namespace std;
+
+class Lidar : public Pathfinder {
  private:
   serialib serial;
   ReadingContainer readings; //key is direction, value is distance
@@ -34,15 +33,16 @@ class Pathfinding {
   bool threadContinue;
   Conf configuration;
   Distance computeGrowthLength(Angle sourceAngle, Distance sourceDistance, Angle otherAngle, Distance otherDistance);
-  Distance rayMax;
-  Distance safeLength;
+  Distance rayMax; //Represents the maximum distance a ray can be (to remove noise)
+  Distance safeLength; //The width of the car in lidar units
+  Angle sweepAngle; //The full angle that the lidar is sweeping
  public:
   string prettyPrint();
   string prettyPrintWithHeuristicValues(Angle desiredHeading);
   string prettyPrintHeuristics(Angle desiredAngle);
-  Pathfinding();
-  Pathfinding(Conf c);
-  ~Pathfinding();
+  Lidar(); // Only for test
+  Lidar(Conf c);
+  ~Lidar();
   
   //Returns the best available heading based off of the algorithm
   //Algorithm

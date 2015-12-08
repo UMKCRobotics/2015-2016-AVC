@@ -6,12 +6,15 @@
         "min_overlap_dist": 0.1
     },
     "pathfinding":{
-        "port": "/dev/ttyACM0",
-        "baud": 115200,
-        "safe_length": 62,
-        "ray_maximum": 300,
-        "perform_growth" : true,
-        "add_degree_coefficient": false
+        "lidar": {
+            "port": "/dev/ttyACM0",
+            "baud": 115200,
+            "safe_length": 62,
+            "ray_maximum": 300,
+            "perform_growth" : false,
+            "add_degree_coefficient": false,
+            "sweep_angle": 180
+        }
     },
     "logger_dispatch":{
         "port":"/dev/arduino_logger",

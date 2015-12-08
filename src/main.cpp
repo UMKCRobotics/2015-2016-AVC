@@ -1,6 +1,6 @@
 #include "logger.h"
 #include "GPS.h"
-#include "Pathfinding.h"
+#include "Lidar.h"
 #include "GPSNodelist.h"
 #include "MotorController.h"
 #include "Conf.hpp"
@@ -28,7 +28,7 @@ int main(int argv, char* argc[]){
   //el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   //GPS gps(conf);
   //MotorController motor(conf);
-  Pathfinding pathfinding(conf);
+  Lidar pathfinding(conf);
 //GPSNodelist nodelist(conf);
   // gps.blockUntilFixed();
   //GPSNode node = nodelist.getNextNode();
