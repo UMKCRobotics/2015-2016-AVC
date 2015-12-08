@@ -20,7 +20,7 @@ int main(int argv, char* argc[]){
   loggingConf.setToDefault();
   loggingConf.set(el::Level::Global, el::ConfigurationType::Filename, conf.data["logfile"].get<string>());
   //el::Loggers::getLogger("gps");
-  el::Loggers::getLogger("pathfinding");
+  el::Loggers::getLogger("lidar");
   //el::Loggers::getLogger("motorcontrol");
   el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
 
