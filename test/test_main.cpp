@@ -2,7 +2,7 @@
 
 #include "catch.hpp"
 #include "../src/GPS.h"
-#include "../src/Pathfinding.h"
+#include "../src/Lidar.h"
 #include "../src/AngleMath.h"
 #include "../src/nmea/minmea.h"
 #include "../src/GPSParser.h"
@@ -41,7 +41,7 @@ TEST_CASE("GPS calcuatedesired heading",""){
   REQUIRE(-180 == GPS::calculateDesiredHeading(180,GPSNode(0,0),GPSNode(0,1)));
 }
 TEST_CASE("Pathfinding","ray heuristic"){
-  Pathfinding pathfinding;
+  Lidar pathfinding;
   REQUIRE(1 == pathfinding.rayHeuristic(0,0,1));
   REQUIRE(1 == pathfinding.rayHeuristic(45,0,1));
   REQUIRE(1 == pathfinding.rayHeuristic(0,45,1));
