@@ -3,12 +3,13 @@
 #define TRIGGER_PIN 2
 #define INPUT_PIN 3 
 #define TIMEOUT 100000
+#define CENTER_DEGREE 0
+#define POS_SWEEP_ANGLE 90
 
 unsigned long pulse_width;
 Servo LServo;
 
-int degree = 180;
-
+int degree = CENTER_DEGREE;
 void setup()
 {
   Serial.begin(115200); // Start serial communications
@@ -18,18 +19,19 @@ void setup()
   
   // Sets the pin with which it is connected to the Arduino by. Damn Kevin...
   LServo.attach(5);
-  LServo.write(degree);
+  LServo.write(CENTER_DEGREE);
 }
 
 void loop()
 {
-  for(degree = 180; degree >= 0; degree--)
+
+  for(degree = CENTER_DEGREE + POS_SWEEP_ANGLE; degree >= CENTER_DEGREE - POS_SWEEP_ANGLE; degree--)
   {
     scan();
     LServo.write(degree);
     delay(10);
   }
-  for(degree = 0; degree <= 180; degree++)
+  for(degree = CENTER_DEGREE - POS_SWEEP_ANGLE; degree <= CENTER_DEGREE + POS_SWEEP_ANGLE; degree++)
   {
     scan(); 
     LServo.write(degree);
