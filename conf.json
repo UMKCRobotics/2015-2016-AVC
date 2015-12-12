@@ -7,7 +7,7 @@
     },
     "pathfinding":{
         "lidar": {
-            "port": "/dev/ttyACM0",
+            "port": "/dev/ttyUSB0",
             "baud": 115200,
             "safe_length": 62,
             "ray_maximum": 300,
