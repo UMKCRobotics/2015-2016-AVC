@@ -19,7 +19,6 @@ template<class T> class PID{
   bigfloat integral_gain;
   bigfloat derivative_gain;
   bigfloat proportional_gain;
-  void setPrevTimeNow();
   time_point currentTime();
  public:
   //Constructors set previous time so start calling the calculation soon
@@ -33,6 +32,12 @@ template<class T> class PID{
    * @param set_point: The value you would ideally be at.
    */
   T calculate(T measured_value, T set_point);
+  
+  /*
+   * Sweet gains bro
+   */
+  void setGains(bigfloat p_gain, bigfloat i_gain, bigfloat d_gain);
+  void setPrevTimeNow();
 };
 
 #endif

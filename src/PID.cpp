@@ -3,9 +3,7 @@
 template<class T>
 PID<T>::PID(){
   setPrevTimeNow();
-  proportional_gain = 1;
-  integral_gain = 1;
-  derivative_gain = 1;
+  setGains(1,1,1);
   integral = 0;
   prev_error = 0;
 }
@@ -13,11 +11,17 @@ PID<T>::PID(){
 template<class T>
 PID<T>::PID(bigfloat p_gain, bigfloat i_gain, bigfloat d_gain){
   setPrevTimeNow();
+  setGains(p_gain,i_gain,d_gain);
+  integral = 0;
+  prev_error = 0;
+}
+
+template<class T>
+void PID<T>::setGains(bigfloat p_gain, bigfloat i_gain, bigfloat d_gain){
   proportional_gain = p_gain;
   integral_gain = i_gain;
   derivative_gain = d_gain;
-  integral = 0;
-  prev_error = 0;
+
 }
 
 template<class T>
