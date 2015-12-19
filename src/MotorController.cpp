@@ -4,6 +4,8 @@ using namespace std;
 
 MotorController::MotorController(Conf c) {
 	configuration = c;
+        turn_coefficient = c.data["motorcontroller"]["gillens_equation"]["turn_coefficient"];
+        gillens_limit = c.data["motorcontroller"]["gillens_equation"]["gillens_limit"];
 	openSerial();
 }
 
@@ -75,4 +77,16 @@ void MotorController::commandBackward(int throttle) {
 	string full_s = "b" + throttle_s + "$";
 	const char * s = full_s.c_str();
 	int suc = serial.WriteString(s);
+}
+
+int MotorController::computeGillensThrottle(int turn){
+  if(turn == 0){
+    return gillens_limit;
+  }
+  return gillens_limit / (turn_coefficient * turn );
+}
+
+void MotorController::runGillensEquation(int turn){
+  commandTurn(turn);
+  commandForward(computeGillensThrottle(turn));
 }
