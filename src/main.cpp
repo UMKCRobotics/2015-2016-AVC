@@ -15,6 +15,8 @@ int main(int argv, char* argc[]){
 
   Conf conf("./conf.json");
   
+  
+  
   //Setting up logging stuff
   el::Configurations loggingConf;
   loggingConf.setToDefault();
