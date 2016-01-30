@@ -16,7 +16,16 @@
         "file":"./nodes"
     },
     "motorcontroller": {
-        "port": "/dev/ttyACM0",
-        "baud": 57600
+       "port": "/dev/arduino_motorcontroller",
+        "baud": 57600,
+        "gillens_equation":{
+            "gillens_limit": 16000,
+            "turn_coefficient": 1.0
+        }
+        
+    },
+    "start_waiter": {
+        "port": "/dev/arduino_logger",
+        "baud": 9600
     }
 }
