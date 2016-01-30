@@ -34,7 +34,7 @@ main
 .sconsign.dblite
 *~
 
-
+**/.build/*
 test_build/*
 !test_build/.donotdelete
 .DS_Store

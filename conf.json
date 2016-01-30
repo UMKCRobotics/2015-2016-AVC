@@ -1,28 +1,35 @@
 {
     "logfile": "./logs/log",
     "gps": {
-        "port": "/dev/ttyUSB0",
-        "baud": 38400
+        "port": "/dev/gps_avc",
+        "baud": 38400,
+        "min_overlap_dist": 0.1
     },
     "pathfinding":{
-        "port": "/dev/ttyACM0",
-        "baud": 9600,
-        "safe_length": 10,
-        "ray_maximum": 100,
-        "perform_growth" : true,
-        "add_degree_coefficient": true
+        "lidar": {
+            "port": "/dev/ttyUSB0",
+            "baud": 115200,
+            "safe_length": 62,
+            "ray_maximum": 300,
+            "perform_growth" : false,
+            "add_degree_coefficient": false,
+            "sweep_angle": 180
+        }
+    },
+    "logger_dispatch":{
+        "port":"/dev/arduino_logger",
+        "baud": 9600
     },
     "nodelist": {
         "file":"./nodes"
     },
     "motorcontroller": {
-       "port": "/dev/arduino_motorcontroller",
+        "port": "/dev/arduino_motorcontroller",
         "baud": 57600,
         "gillens_equation":{
             "gillens_limit": 16000,
             "turn_coefficient": 1.0
         }
-        
     },
     "start_waiter": {
         "port": "/dev/arduino_logger",
