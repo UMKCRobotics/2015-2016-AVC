@@ -28,7 +28,7 @@ class Vision : public Pathfinder {
 		bool threadContinue;
 		VisionReadings color_locations = {{0,0,0,0},{0,0,0,0}}; //color container
 		void initialize_colors(Conf c);
-		VideoCapture cap_main;
+                VideoCapture cap_main;
 		VisionReadings readCamera();
 		thread vision_thread;
 		vector<vector<Scalar>> colors_track = vector<vector<Scalar>>(4, vector<Scalar>(2));

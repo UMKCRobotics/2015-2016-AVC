@@ -106,7 +106,7 @@ VisionReadings Vision::getLocations() {
 
 Vision::Vision(Conf configuration) {
 	initialize_colors(configuration);
-	cap_main = VideoCapture(configuration.data["pathfinding"]["camera"]["index"]);
+	cap_main = VideoCapture(configuration.data["pathfinding"]["camera"]["index"].get<int>());
 	//if(!cap.isOpened()) // use this to log camera NOT opening
 	threadContinue = true;
 	vision_thread = thread([this]{
@@ -121,7 +121,7 @@ Vision::~Vision() {
   vision_thread.join();
 }
 
-Angle bestAvailableHeading(Angle desiredHeading) {
+Angle Vision::bestAvailableHeading(Angle desiredHeading) {
 	float blue_x = color_locations.color_loc_x[0]; //blue
 	if (blue_x == 0) {
 		return 666;
