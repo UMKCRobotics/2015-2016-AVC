@@ -81,7 +81,10 @@
             "gillens_limit": 16000,
             "turn_coefficient": 1.0
         }
-        
+    },
+    "start_waiter": {
+        "port": "/dev/arduino_logger",
+        "baud": 9600
     }
 
 }
