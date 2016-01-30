@@ -14,6 +14,57 @@
             "perform_growth" : false,
             "add_degree_coefficient": false,
             "sweep_angle": 180
+        },
+        "camera": {
+            "index": 0,
+            "blue":{
+                "lower":{
+                    "hue": 97,
+                    "saturation": 35,
+                    "value": 35
+                },
+                "upper":{
+                    "hue": 110,
+                    "saturation": 255,
+                    "value": 255
+                }
+            },
+            "red":{
+                "lower":{
+                    "hue": 0,
+                    "saturation": 50,
+                    "value": 47
+                },
+                "upper":{
+                    "hue": 6,
+                    "saturation": 255,
+                    "value": 255
+                }
+            },
+            "green":{
+                "lower":{
+                    "hue": 35,
+                    "saturation": 35,
+                    "value": 35
+                },
+                "upper":{
+                    "hue": 87,
+                    "saturation": 255,
+                    "value": 255
+                }
+            },
+            "yellow":{
+                "lower":{
+                    "hue": 15,
+                    "saturation": 35,
+                    "value": 35
+                },
+                "upper":{
+                    "hue": 27,
+                    "saturation": 255,
+                    "value": 255
+                }
+            }
         }
     },
     "logger_dispatch":{
@@ -35,4 +86,5 @@
         "port": "/dev/arduino_logger",
         "baud": 9600
     }
+
 }
