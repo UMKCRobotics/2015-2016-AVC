@@ -72,6 +72,7 @@ void Lidar::parseReadingAndInsertIntoReadings(){
 }
 
 Angle Lidar::bestAvailableHeading(Angle desiredHeading){
+  TIMED_FUNC(timerobj);
   Angle best_heading = -1;
   double best_heuristic = -1;
   ReadingContainer used_reading;
