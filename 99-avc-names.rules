@@ -5,3 +5,5 @@ SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_pathfin
 SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_logger"
 
 SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="gps_avc"
+
+SUBSYSTEM=="block", ATTRS{serial}=="4C530001120805116493", SYMLINK+="avc_flash_drive"
