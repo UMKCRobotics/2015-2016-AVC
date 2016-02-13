@@ -3,8 +3,8 @@
 #define TRIGGER_PIN 2
 #define INPUT_PIN 3 
 #define TIMEOUT 100000
-#define CENTER_DEGREE 0
-#define POS_SWEEP_ANGLE 90
+#define CENTER_DEGREE 90
+#define POS_SWEEP_ANGLE 27
 
 unsigned long pulse_width;
 Servo LServo;

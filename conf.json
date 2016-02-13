@@ -7,13 +7,13 @@
     },
     "pathfinding":{
         "lidar": {
-            "port": "/dev/ttyUSB0",
+            "port": "/dev/ttyUSB1",
             "baud": 115200,
             "safe_length": 62,
             "ray_maximum": 300,
             "perform_growth" : false,
             "add_degree_coefficient": false,
-            "sweep_angle": 180
+            "sweep_angle": 120
         }
     },
     "logger_dispatch":{
@@ -24,7 +24,7 @@
         "file":"./nodes"
     },
     "motorcontroller": {
-        "port": "/dev/arduino_motorcontroller",
+        "port": "/dev/ttyUSB0",
         "baud": 57600
     }
 }
