@@ -10,7 +10,7 @@ double GPS::calculateAngleToNode(GPSNode current, GPSNode desired){
   //taken from http://wikicode.wikidot.com/get-angle-of-line-between-two-points
   double xDiff = desired.longitude - current.longitude;
   double yDiff = desired.latitude - current.latitude;
-  return atan2(yDiff,xDiff);
+  return atan2(yDiff,xDiff) * 180 / 3.14159265;
 }
 
 string GPS::readNMEAString(){
