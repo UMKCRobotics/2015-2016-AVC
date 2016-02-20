@@ -6,6 +6,7 @@
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
 #include "Vision.h"
+#include "StartWaiter.h"
 #include <unistd.h>
 #include <ctime>
 
@@ -45,6 +46,8 @@ int main(int argv, char* argc[]){
   //   double desiredHeading = gps.calculateHeadingToNode(node); 
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
+  StartWaiter startwaiter(conf);
+  startwaiter.blockUntilGoSignal();
   time_t start = time(nullptr);
   while(time(nullptr)-start < 10) {
        //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
@@ -54,6 +57,6 @@ int main(int argv, char* argc[]){
 	motor.commandForward(1);
 	motor.commandTurn(bestPossibleHeading);
   }
-
+  motor.commandForward(0);
   return 0;
 }

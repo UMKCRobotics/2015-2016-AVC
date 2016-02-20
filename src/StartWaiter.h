@@ -16,10 +16,9 @@ class StartWaiter {
   }
   void blockUntilGoSignal(){
     char* outputByte;
-    char status;
-    status = serial.ReadChar(outputByte);
-    while(status != 0 && *outputByte != 1){
-     status = serial.ReadChar(outputByte); 
+    char status = -1;
+    while(status == -1){ 
+      status = serial.ReadChar(outputByte);
     }
     serial.Close();
   }
