@@ -46,17 +46,19 @@ int main(int argv, char* argc[]){
   //   double desiredHeading = gps.calculateHeadingToNode(node); 
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
-  StartWaiter startwaiter(conf);
-  startwaiter.blockUntilGoSignal();
-  time_t start = time(nullptr);
-  while(time(nullptr)-start < 10) {
-       //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
-       //LOG(INFO) << "Best Heading: " << bestPossibleHeading;
-       //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
-       double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
-	motor.commandForward(1);
-	motor.commandTurn(bestPossibleHeading);
+  StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
+  while(true){
+    startwaiter.blockUntilGoSignal();
+    time_t start = time(nullptr);
+    while(time(nullptr)-start < 10) {
+        //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
+        //LOG(INFO) << "Best Heading: " << bestPossibleHeading;
+        //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
+        double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
+            motor.commandForward(1);
+            motor.commandTurn(bestPossibleHeading);
+    }
+    motor.commandForward(0);
   }
-  motor.commandForward(0);
   return 0;
 }
