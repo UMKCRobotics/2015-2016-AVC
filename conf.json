@@ -1,5 +1,5 @@
 {
-    "logfile": "./logs/log",
+    "logfile": "/media/usb_avc/log",
     "gps": {
         "port": "/dev/gps_avc",
         "baud": 38400,
@@ -7,7 +7,7 @@
     },
     "pathfinding":{
         "lidar": {
-            "port": "/dev/ttyUSB0",
+            "port": "/dev/arduino_pathfinding",
             "baud": 115200,
             "safe_length": 62,
             "ray_maximum": 300,
