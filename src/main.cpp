@@ -5,6 +5,7 @@
 #include "MotorController.h"
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
+#include "Vision.h"
 #include <unistd.h>
 
 #include <string>
@@ -30,7 +31,9 @@ int main(int argv, char* argc[]){
   //el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   //GPS gps(conf);
   //MotorController motor(conf);
-  Lidar pathfinding(conf);
+  //Lidar pathfinding(conf);
+  Vision seethings(conf);
+
 //GPSNodelist nodelist(conf);
   // gps.blockUntilFixed();
   //GPSNode node = nodelist.getNextNode();
@@ -43,9 +46,11 @@ int main(int argv, char* argc[]){
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
   while(true){
-       double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
-       LOG(INFO) << "Best Heading: " << bestPossibleHeading;
-       LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
+       //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
+       //LOG(INFO) << "Best Heading: " << bestPossibleHeading;
+       //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
+       double bestPossibleHeading = seethings.bestAvailableHeading(0);
+       LOG(INFO) << "Blue crap is at: " << bestPossibleHeading;
        sleep(5);
   }
 
