@@ -38,8 +38,8 @@ TEST_CASE("ANGLEMath","Angle between angles"){
 TEST_CASE("GPS calcuatedesired heading",""){
   REQUIRE(0 == GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(0,1)));
   REQUIRE(-180 == GPS::calculateDesiredHeading(180,GPSNode(0,0),GPSNode(0,1)));
-  REQUIRE(45 == GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(1,1))); 
-  REQUIRE(-45 == GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(-1,1))); 
+  REQUIRE(45 == Approx(GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(1,1)))); 
+  REQUIRE(-45 == Approx(GPS::calculateDesiredHeading(0,GPSNode(0,0),GPSNode(-1,1)))); 
 }
 TEST_CASE("Pathfinding","ray heuristic"){
   Lidar pathfinding;
