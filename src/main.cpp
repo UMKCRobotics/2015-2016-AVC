@@ -5,10 +5,9 @@
 #include "MotorController.h"
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
-#include "Vision.h"
 #include "StartWaiter.h"
 #include <unistd.h>
-#include <ctime>
+#include <time.h>
 
 using namespace std;
 #include <string>
@@ -47,18 +46,26 @@ int main(int argv, char* argc[]){
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
   StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
-  while(true){
-    startwaiter.blockUntilGoSignal();
-    time_t start = time(nullptr);
-    while(time(nullptr)-start < 10) {
+  startwaiter.blockUntilGoSignal();
+    long count = 0;
+    while(count < 1000) {
         //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
         //LOG(INFO) << "Best Heading: " << bestPossibleHeading;
         //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
+	usleep(5000);
         double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
-            motor.commandForward(1);
-            motor.commandTurn(bestPossibleHeading);
+        motor.commandTurn(bestPossibleHeading);
+	usleep(5000);
+        motor.commandForward(1);
+	count++;
+	LOG(INFO) << count;
     }
-    motor.commandForward(0);
-  }
+    LOG(INFO) << "lkawjerlkawjerlkj";
+	
+    	for(int i = 0; i < 10; ++i){
+    		motor.commandStop();
+		usleep(10000);
+	}
+
   return 0;
 }
