@@ -29,13 +29,11 @@ void loop()
   {
     scan();
     LServo.write(degree);
-    delay(10);
   }
   for(degree = CENTER_DEGREE - POS_SWEEP_ANGLE; degree <= CENTER_DEGREE + POS_SWEEP_ANGLE; degree++)
   {
     scan(); 
     LServo.write(degree);
-    delay(10);
   }
 }
 
