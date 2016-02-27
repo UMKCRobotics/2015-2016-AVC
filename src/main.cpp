@@ -47,8 +47,9 @@ int main(int argv, char* argc[]){
   //   motor.commandTurn(bestPossibleHeading);
   StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
   startwaiter.blockUntilGoSignal();
+  long runningTime = c.data["runingTime"];
     long count = 0;
-    while(count < 1000) {
+    while(count < runningTime) {
         //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
         //LOG(INFO) << "Best Heading: " << bestPossibleHeading;
         //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);

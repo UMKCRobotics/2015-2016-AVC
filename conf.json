@@ -1,4 +1,5 @@
 {
+    "runningTime" : 1000,
     "logfile": "/media/usb_avc/log",
     "gps": {
         "port": "/dev/gps_avc",
