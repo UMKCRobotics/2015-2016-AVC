@@ -19,18 +19,21 @@
 
 using namespace std;
 
+enum priority{CRITICAL = 0, HIGH = 1, MID = 2, LOW = 3};
+
 class commandQueue
 {
 private:
 	int maxSize; //max number of functions allowed in the queue
 
 	//priority queue
-	priority_queue<pair<int, function<void()>>, vector<pair<int, function<void()>>>, function<bool(pair<int, function<void()>>, pair<int, function<void()>>)>> commands; //define this
+	priority_queue<pair<priority, function<void()>>, vector<pair<priority, function<void()>>>, function<bool(pair<priority, function<void()>>, pair<priority, function<void()>>)>> commands;
+
 	mutex commands_mutex; //mutex for thread locking inner queue access
 
 	//Thoughts: Should I just use strings as the commands instead of pushing a function?
 
-	void push(int priority, function<void()> commandFunction)
+	void push(priority pri, function<void()> commandFunction)
 	{
 
 		lock_guard<mutex> guard(commands_mutex);
@@ -39,7 +42,7 @@ private:
 			commands.pop();
 
 		};
-		commands.push(make_pair(priority, commandFunction));
+		commands.push(make_pair(pri, commandFunction));
 
 	};
 
@@ -61,15 +64,19 @@ private:
 
 	commandQueue()
 	{
-		//do stuff with the config
-		maxSize = 4; //set this from the config file
 
-		auto compare = [](pair<int, function<void()>> a, pair<int, function<void()>> b){return a.first > b.first;};
-		commands = priority_queue<pair<int, function<void()>>, vector<pair<int, function<void()>>>, function<bool(pair<int, function<void()>>, pair<int, function<void()>>)>>(compare);
-	}
+	};
 
 
 public:
+
+	static void initQueue(Conf c) //don't forget to initialize!
+	{
+		commandQueue::getinstance().maxSize = c.data["motorcontroller"]["queue_size"];
+
+		auto compare = [](pair<priority, function<void()>> a, pair<priority, function<void()>> b){return a.first > b.first;};
+		commandQueue::getinstance().commands = priority_queue<pair<priority, function<void()>>, vector<pair<priority, function<void()>>>, function<bool(pair<priority, function<void()>>, pair<priority, function<void()>>)>>(compare);
+	}
 
 	static commandQueue& getinstance() //of this commandqueue
 	{
@@ -78,9 +85,9 @@ public:
 	}
 
 	//push a function to the queue
-	static void pushCommand(int priority, function<void()> command){
+	static void pushCommand(priority pri, function<void()> command){
 
-		commandQueue::getinstance().push(priority, command);
+		commandQueue::getinstance().push(pri, command);
 
 		return;
 	}

@@ -80,7 +80,8 @@
         "gillens_equation":{
             "gillens_limit": 16000,
             "turn_coefficient": 1.0
-        }
+        },
+        "queue_size": 4
     },
     "start_waiter": {
         "port": "/dev/arduino_logger",
