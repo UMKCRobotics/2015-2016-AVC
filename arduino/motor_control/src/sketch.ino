@@ -24,10 +24,10 @@
  * Only turns, so turn code can allow full 1000-2000 range
 */
 
-const int THROTTLE_DEADZONE = 76;
+const int THROTTLE_DEADZONE = 100; //minimum throttle for wheel spin is 76
 const int TURN_DEADZONE = 0;
 const int NEUTRAL = 1500;
-const int MAX_ABS_THROTTLE = 100;
+const int MAX_ABS_THROTTLE = 200;
 const int MAX_ABS_INPUT = 500;
 const int MAX_ANGLE = 27;
 

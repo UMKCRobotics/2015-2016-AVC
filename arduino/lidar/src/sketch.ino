@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 #define TRIGGER_PIN 2
-#define INPUT_PIN 3 
+#define INPUT_PIN 3
 #define TIMEOUT 100000
 #define CENTER_DEGREE 75
 #define POS_SWEEP_ANGLE 27
@@ -45,7 +45,7 @@ void scan()
   pulse_width = pulseIn(INPUT_PIN, HIGH); // Count how long the pulse is high in microseconds
 
   if(pulse_width != 0){ // If we get a reading that isn't zero, let's print it
-        pulse_width = pulse_width/10; // 10usec = 1 cm of distance for LIDAR-Lite
+        //pulse_width = pulse_width/10; // 10usec = 1 cm of distance for LIDAR-Lite
         String send_string = String(degree-CENTER_DEGREE) + "," + String(pulse_width) + "$";
   	Serial.print(send_string); // Print the distance
   }

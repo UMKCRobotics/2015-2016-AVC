@@ -57,6 +57,7 @@ int main(int argv, char* argc[]){
         //LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
 	usleep(5000);
         double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
+	LOG(INFO) << pathfinding.prettyPrintWithHeuristicValues(0);
         motor.commandTurn(bestPossibleHeading);
 	usleep(5000);
         motor.commandForward(speed);
