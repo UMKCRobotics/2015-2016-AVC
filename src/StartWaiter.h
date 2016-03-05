@@ -18,6 +18,7 @@ class StartWaiter {
     char status = -1;
     while(status == -1){ 
       status = serial->ReadChar(outputByte);
+      usleep(10);
     }
     usleep(100);
     serial->FlushReceiver();
