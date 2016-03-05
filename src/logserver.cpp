@@ -2,8 +2,11 @@
 
 using namespace std;
 
-LogServer::LogServer()
-{}
+LogServer::LogServer(Conf C)
+{
+	configuration = C;
+
+}
 
 void LogServer::eventHandler(struct mg_connection *connection, int event, void *p)
 {

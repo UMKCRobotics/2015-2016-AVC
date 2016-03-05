@@ -87,6 +87,10 @@
     "start_waiter": {
         "port": "/dev/arduino_logger",
         "baud": 9600
+    },
+    "webserver": {
+        "port": "8000",
+        "document_root": "../webroot"
     }
 
 }
