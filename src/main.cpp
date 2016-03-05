@@ -16,7 +16,7 @@ INITIALIZE_EASYLOGGINGPP
 
 int main(int argv, char* argc[]){
 
-  Conf conf("./conf.json");
+  Conf conf("/home/umkc/2015-2016-AVC/conf.json");
   
   //Setting up logging stuff
   el::Configurations loggingConf;
@@ -46,8 +46,10 @@ int main(int argv, char* argc[]){
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
   StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
+ while(true){
   startwaiter.blockUntilGoSignal();
-  long runningTime = c.data["runingTime"];
+  long runningTime = conf.data["runningTime"].get<long>();
+  int speed = conf.data["testSpeed"].get<int>();
     long count = 0;
     while(count < runningTime) {
         //double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
@@ -57,7 +59,7 @@ int main(int argv, char* argc[]){
         double bestPossibleHeading = pathfinding.bestAvailableHeading(0);
         motor.commandTurn(bestPossibleHeading);
 	usleep(5000);
-        motor.commandForward(1);
+        motor.commandForward(speed);
 	count++;
 	LOG(INFO) << count;
     }
@@ -67,6 +69,7 @@ int main(int argv, char* argc[]){
     		motor.commandStop();
 		usleep(10000);
 	}
+}
 
   return 0;
 }

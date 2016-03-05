@@ -1,5 +1,5 @@
 #include <Servo.h>
-//#include <LiquidCrystal.h>
+#include <LiquidCrystal.h>
 
 #define ESCPIN 10
 #define STRPIN 9
@@ -24,14 +24,14 @@
  * Only turns, so turn code can allow full 1000-2000 range
 */
 
-const int THROTTLE_DEADZONE = 76;
-const int TURN_DEADZONE = 0;
-const int NEUTRAL = 1500;
-const int MAX_ABS_THROTTLE = 100;
-const int MAX_ABS_INPUT = 500;
+const float THROTTLE_DEADZONE = 76; //air spin min = 76
+const float TURN_DEADZONE = 76;
+const float NEUTRAL = 1500;
+const float MAX_ABS_THROTTLE = 150;
+const float MAX_ABS_INPUT = 500;
 const int MAX_ANGLE = 27;
 
-//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 Servo ESC;
 Servo STR;
@@ -39,38 +39,31 @@ Servo STR;
 int offset = 90;
 int leftPos = -45;
 int rightPos = 45;
-bool notStarted = true;
-long int startTime;
-int blinkdelay = 500;
-bool lightOn = false;
 
 void setup()
 {
-  //lcd.begin(16, 2);
+  lcd.begin(16, 2);
   //UNCOMMENT WHEN READY TO USE
-  pinMode(13,OUTPUT);
+  /*
   ESC.attach(ESCPIN,1000,2000);
   ESC.write(NEUTRAL);
 
   STR.attach(STRPIN,1000,2000);
   STR.write(NEUTRAL);
+  */
 
   Serial.begin(57600);
   Serial.write('1');
-  //delay(1000);
-  digitalWrite(13,HIGH);
-  startTime = millis();
+  delay(1000);
 }
 
 void loop()
 {
   if (Serial.available()) {
-    digitalWrite(13,LOW);
-    notStarted = false;
     bool continueRead = true;
     char command;
     String value = "";
-    //lcd.clear();
+    lcd.clear();
     command = (char)Serial.read();
     while (Serial.available() > 0 && continueRead)
     {
@@ -86,114 +79,84 @@ void loop()
     parseMessage(command, value);
 
   }
-  if (notStarted)
-  {
-    ESC.write(NEUTRAL);
-    STR.write(NEUTRAL);
-    delay(50);
-  }
-  else
-  {
-    int currentTime = millis();
-    if (currentTime-startTime >= blinkdelay)
-    {
-      startTime = currentTime;
-      if (lightOn)
-      {
-        digitalWrite(13,LOW);
-	lightOn = false;
-      }
-      else
-      {
-        digitalWrite(13,HIGH);
-        lightOn = true;
-      }
-    }
-  }
-  delay(10);
 }
 
 void parseMessage(char command, String value)
 {
   if (command == STOPCMD)
   {
-    //lcd.print("s = STOP");
-    //lcd.setCursor(0, 1);
-    //lcd.print(NEUTRAL);
-    ESC.write(NEUTRAL);
-    blinkdelay = 1000;
+    lcd.print("s = STOP");
+    lcd.setCursor(0, 1);
+    lcd.print(NEUTRAL);
+    //ESC.write(NEUTRAL);
 
   }
   else if (command == FWRDCMD)
   {
-    int throttle;
-    //lcd.print("f = FORWARD");
-    //lcd.setCursor(0, 1);
+    float throttle;
+    lcd.print("f = FORWARD");
+    lcd.setCursor(0, 1);
     int intvalue = value.toInt();
     //CHANGE THIS TO CHANGE WHAT VALUES ARE ALLOWED
     intvalue = constrain(intvalue, 0, 99);
     if (intvalue != 0)
     {
-      throttle = map(intvalue, 1, 99, NEUTRAL + THROTTLE_DEADZONE, NEUTRAL + MAX_ABS_THROTTLE);
+      throttle = map(intvalue, 0, 99, NEUTRAL + THROTTLE_DEADZONE, NEUTRAL + MAX_ABS_THROTTLE);
     }
     else
     {
       throttle = NEUTRAL;
     }
-    //lcd.print(throttle);
-    ESC.write(throttle);
-    blinkdelay = 500;
+    lcd.print(throttle);
+    //ESC.write(throttle);
   }
   else if (command == BWRDCMD)
   {
-    int throttle;
-    //lcd.print("b = BACKWARD");
-    //lcd.setCursor(0, 1);
+    float throttle;
+    lcd.print("b = BACKWARD");
+    lcd.setCursor(0, 1);
     int intvalue = value.toInt();
     //CHANGE THIS TO CHANGE WHAT VALUES ARE ALLOWED
     intvalue = constrain(intvalue, 0, 99);
     if (intvalue != 0)
     {
-      throttle = map(intvalue, 1, 99, NEUTRAL - THROTTLE_DEADZONE, NEUTRAL - MAX_ABS_THROTTLE);
+      throttle = map(intvalue, 0, 99, NEUTRAL - THROTTLE_DEADZONE, NEUTRAL - MAX_ABS_THROTTLE);
     }
     else
     {
       throttle = NEUTRAL;
     }
-    //lcd.print(throttle);
-    ESC.write(throttle);
-    blinkdelay = 500;
+    lcd.print(throttle);
+    //ESC.write(throttle);
   }
   else if (command == TURNCMD)
   {
-    int turn;
-    //lcd.print("t = TURN");
-    //lcd.setCursor(0,1);
+    float turn;
+    lcd.print("t = TURN");
+    lcd.setCursor(0,1);
     int intvalue = value.toInt();
     intvalue = constrain(intvalue,-MAX_ANGLE,MAX_ANGLE);
     if (intvalue > 0)
     {
-      turn = map(intvalue, 1, MAX_ANGLE, NEUTRAL - TURN_DEADZONE, NEUTRAL - MAX_ABS_INPUT);
+      turn = map(intvalue, 0, MAX_ANGLE, NEUTRAL + TURN_DEADZONE, NEUTRAL + MAX_ABS_INPUT);
     }
     else if (intvalue < 0)
     {
-      turn = map(intvalue, 1, -MAX_ANGLE, NEUTRAL + TURN_DEADZONE, NEUTRAL + MAX_ABS_INPUT);
+      turn = map(intvalue, 0, -MAX_ANGLE, NEUTRAL - TURN_DEADZONE, NEUTRAL - MAX_ABS_INPUT);
     }
     else
     {
       turn = NEUTRAL;
     }
-    //lcd.print(turn);
-    STR.write(turn);
-    blinkdelay = 125;
+    lcd.print(turn);
+    //STR.write(turn);
   }
   else if (command == CNTRCMD)
   {
-    //lcd.print("c = CENTER");
-    //lcd.setCursor(0, 1);
-    //lcd.print(NEUTRAL);
-    STR.write(NEUTRAL);
-    blinkdelay = 250;
+    lcd.print("c = CENTER");
+    lcd.setCursor(0, 1);
+    lcd.print(NEUTRAL);
+    //STR.write(NEUTRAL);
   }
 }
 

@@ -3,7 +3,7 @@
 #define TRIGGER_PIN 2
 #define INPUT_PIN 3 
 #define TIMEOUT 100000
-#define CENTER_DEGREE 98
+#define CENTER_DEGREE 75
 #define POS_SWEEP_ANGLE 27
 
 unsigned long pulse_width;
@@ -20,6 +20,7 @@ void setup()
   // Sets the pin with which it is connected to the Arduino by. Damn Kevin...
   LServo.attach(5);
   LServo.write(CENTER_DEGREE);
+  delay(3000);
 }
 
 void loop()
@@ -29,11 +30,13 @@ void loop()
   {
     scan();
     LServo.write(degree);
+    delay(10);
   }
   for(degree = CENTER_DEGREE - POS_SWEEP_ANGLE; degree <= CENTER_DEGREE + POS_SWEEP_ANGLE; degree++)
   {
     scan(); 
     LServo.write(degree);
+    delay(10);
   }
 }
 
