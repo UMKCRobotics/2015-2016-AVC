@@ -21,19 +21,18 @@ using namespace std;
 
 enum priority{CRITICAL = 0, HIGH = 1, MID = 2, LOW = 3};
 
+template <typename CommandFunction>
 class commandQueue
 {
 private:
 	int maxSize; //max number of functions allowed in the queue
+	bool initialized = false; //starts out uninitialized
 
 	//priority queue
-	priority_queue<pair<priority, function<void()>>, vector<pair<priority, function<void()>>>, function<bool(pair<priority, function<void()>>, pair<priority, function<void()>>)>> commands;
-
+	priority_queue<pair<priority, CommandFunction>, vector<pair<priority, CommandFunction>>, function<bool(pair<priority, CommandFunction>, pair<priority, CommandFunction>)>> commands;
 	mutex commands_mutex; //mutex for thread locking inner queue access
 
-	//Thoughts: Should I just use strings as the commands instead of pushing a function?
-
-	void push(priority pri, function<void()> commandFunction)
+	void push(priority pri, CommandFunction command)
 	{
 
 		lock_guard<mutex> guard(commands_mutex);
@@ -42,7 +41,7 @@ private:
 			commands.pop();
 
 		};
-		commands.push(make_pair(pri, commandFunction));
+		commands.push(make_pair(pri, command));
 
 	};
 
@@ -62,20 +61,24 @@ private:
 		
 	};//dont return void
 
-	commandQueue()
+	void initialize(Conf c)
 	{
+		maxSize = c.data["motorcontroller"]["queue_size"];
 
-	};
+		auto compare = [](pair<priority, CommandFunction> a, pair<priority, CommandFunction> b){return a.first < b.first;};
+		commands = priority_queue<pair<priority, CommandFunction>, vector<pair<priority, CommandFunction>>, function<bool(pair<priority, CommandFunction>, pair<priority, CommandFunction>)>>(compare);
+
+		initialized = true;
+	}
+
+	commandQueue(){};
 
 
 public:
 
 	static void initQueue(Conf c) //don't forget to initialize!
 	{
-		commandQueue::getinstance().maxSize = c.data["motorcontroller"]["queue_size"];
-
-		auto compare = [](pair<priority, function<void()>> a, pair<priority, function<void()>> b){return a.first > b.first;};
-		commandQueue::getinstance().commands = priority_queue<pair<priority, function<void()>>, vector<pair<priority, function<void()>>>, function<bool(pair<priority, function<void()>>, pair<priority, function<void()>>)>>(compare);
+		commandQueue::getinstance().initialize(c);
 	}
 
 	static commandQueue& getinstance() //of this commandqueue
@@ -85,7 +88,7 @@ public:
 	}
 
 	//push a function to the queue
-	static void pushCommand(priority pri, function<void()> command){
+	static void enqueueCommand(priority pri, CommandFunction && command){
 
 		commandQueue::getinstance().push(pri, command);
 
@@ -93,8 +96,8 @@ public:
 	}
 
 	//pop a function from the queue
-	static function<void()> popCommand(){
-		function<void()> command = commandQueue::getinstance().pop();
+	static CommandFunction dequeueCommand(){
+		CommandFunction command = commandQueue::getinstance().pop();
 
 		return command;
 
