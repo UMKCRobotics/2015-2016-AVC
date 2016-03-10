@@ -21,15 +21,26 @@ using namespace std;
 struct VisionReadings {
 	float color_loc_x[4];
 	float color_loc_y[4];
+	int dim[2]; //image dimensions
 };
 
 class Vision : public Pathfinder {
 	private:
-		bool threadContinue;
-		VisionReadings color_locations = {{0,0,0,0},{0,0,0,0}}; //color container
-		void initialize_colors(Conf c);
-                VideoCapture cap_main;
+		//Functions:
+		void initialize_values(Conf c);
 		VisionReadings readCamera();
+		double getYDist(int y_raw, int y_dim);
+		double getXDist(int x_raw, int y_raw, int x_dim, int y_dim);
+		double getAngle(double x_d, double y_d);
+		//Variables:
+		bool threadContinue;
+		int skip_frames;
+		double scale;
+		double unit;
+		double c_y_dist[4];
+		double c_x_dist[2];
+		VisionReadings color_locations = {{0,0,0,0},{0,0,0,0},{0,0}}; //color container
+		VideoCapture cap_main;
 		thread vision_thread;
 		vector<vector<Scalar>> colors_track = vector<vector<Scalar>>(4, vector<Scalar>(2));
 	public:
