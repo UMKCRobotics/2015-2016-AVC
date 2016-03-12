@@ -11,7 +11,6 @@ class StartWaiter {
  public:
   StartWaiter(serialib* serial_){
     serial = serial_;
-    serial->FlushReceiver();
   }
   void blockUntilGoSignal(){
     char* outputByte;
@@ -21,7 +20,6 @@ class StartWaiter {
       usleep(10);
     }
     usleep(100);
-    serial->FlushReceiver();
   }
 };
 

@@ -47,7 +47,7 @@ int main(int argv, char* argc[]){
   //   double desiredHeading = gps.calculateHeadingToNode(node); 
   //   double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
   //   motor.commandTurn(bestPossibleHeading);
-  StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
+  StartWaiter startwaiter(LoggerDispatchGlobals::serial);
  while(true){
   startwaiter.blockUntilGoSignal();
   long runningTime = conf.data["runningTime"].get<long>();
