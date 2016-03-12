@@ -38,24 +38,13 @@ int main(int argv, char* argc[]){
   //Vision seethings(conf);
 
 
-  StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
+  StartWaiter startwaiter(LoggerDispatchGlobals::serial);
   int speed = conf.data["testSpeed"].get<int>();
   startwaiter.blockUntilGoSignal();
   GPSNodelist nodelist(conf);
-  string ps = "iayylmao" + '\n';
-  const char * os = ps.c_str();
-  LoggerDispatchGlobals::serial.WriteString(os);
   gps.blockUntilFixed(); 
   while(true){
 	usleep(1000000);
-	GPSNode nod = gps.info.node;
-	stringstream ss;
-	string outputString;
-	ss << "i" << nod.latitude << " " << nod.longitude << endl;
-	getline(ss,outputString);
-	outputString = outputString + '\n';
-	const char * output = outputString.c_str();
-	LoggerDispatchGlobals::serial.WriteString(output);
   }
   /*
   GPSNode node = nodelist.getNextNode();

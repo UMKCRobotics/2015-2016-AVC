@@ -68,11 +68,11 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
           }
         }break;
             case MINMEA_INVALID: {
-              CLOG(ERROR,"gps") << nmeastring << "is not valid";
+              //CLOG(ERROR,"gps") << nmeastring << "is not valid";
             } break;
 
             default: {
-              CLOG(ERROR,"gps") <<  nmeastring <<" is not parsed";
+              //CLOG(ERROR,"gps") <<  nmeastring <<" is not parsed";
             } break;
         }
 }
