@@ -40,32 +40,25 @@ int offset = 90;
 int leftPos = -45;
 int rightPos = 45;
 bool notStarted = true;
-long int startTime;
-int blinkdelay = 500;
-bool lightOn = false;
 
 void setup()
 {
   //lcd.begin(16, 2);
   //UNCOMMENT WHEN READY TO USE
-  pinMode(13,OUTPUT);
   ESC.attach(ESCPIN,1000,2000);
   ESC.write(NEUTRAL);
 
   STR.attach(STRPIN,1000,2000);
   STR.write(NEUTRAL);
-
+	
   Serial.begin(57600);
   Serial.write('1');
-  //delay(1000);
-  digitalWrite(13,HIGH);
-  startTime = millis();
+  delay(1000);
 }
 
 void loop()
 {
   if (Serial.available()) {
-    digitalWrite(13,LOW);
     notStarted = false;
     bool continueRead = true;
     char command;
@@ -94,23 +87,8 @@ void loop()
   }
   else
   {
-    int currentTime = millis();
-    if (currentTime-startTime >= blinkdelay)
-    {
-      startTime = currentTime;
-      if (lightOn)
-      {
-        digitalWrite(13,LOW);
-	lightOn = false;
-      }
-      else
-      {
-        digitalWrite(13,HIGH);
-        lightOn = true;
-      }
-    }
+    delay(10);
   }
-  delay(10);
 }
 
 void parseMessage(char command, String value)
@@ -121,8 +99,6 @@ void parseMessage(char command, String value)
     //lcd.setCursor(0, 1);
     //lcd.print(NEUTRAL);
     ESC.write(NEUTRAL);
-    blinkdelay = 1000;
-
   }
   else if (command == FWRDCMD)
   {
@@ -142,8 +118,8 @@ void parseMessage(char command, String value)
     }
     //lcd.print(throttle);
     ESC.write(throttle);
-    blinkdelay = 500;
   }
+
   else if (command == BWRDCMD)
   {
     int throttle;
@@ -162,8 +138,8 @@ void parseMessage(char command, String value)
     }
     //lcd.print(throttle);
     ESC.write(throttle);
-    blinkdelay = 500;
   }
+
   else if (command == TURNCMD)
   {
     int turn;
@@ -185,15 +161,14 @@ void parseMessage(char command, String value)
     }
     //lcd.print(turn);
     STR.write(turn);
-    blinkdelay = 125;
   }
+
   else if (command == CNTRCMD)
   {
     //lcd.print("c = CENTER");
     //lcd.setCursor(0, 1);
     //lcd.print(NEUTRAL);
     STR.write(NEUTRAL);
-    blinkdelay = 250;
   }
 }
 
