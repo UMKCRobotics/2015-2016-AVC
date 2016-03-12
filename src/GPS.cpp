@@ -45,10 +45,10 @@ string GPS::readNMEAString(){
 void GPS::readAllInQueue(){
   while(serial.Peek() > 0){
    string output =  readNMEAString();
-   CLOG(INFO,"gps") << "found string: " << output;
+   //CLOG(INFO,"gps") << "found string: " << output;
    GPSParser::parseNMEAString(output,info);
-   logCurrentInfo();
   }
+  logCurrentInfo();
 }
 void GPS::logCurrentInfo(){
   info.log();
@@ -105,6 +105,7 @@ double GPS::calculateHeadingToNode(GPSNode node){
 void GPS::blockUntilFixed(){
     while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
       CLOG_EVERY_N(10,INFO,"gps") << "Waiting on fix...";
+      usleep(100);
    }
 }
 

@@ -1,3 +1,5 @@
+#define DEBUG false
+
 #include "logger.h"
 #include "GPS.h"
 #include "Lidar.h"
