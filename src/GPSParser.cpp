@@ -50,10 +50,10 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
              }
         }break;
         case MINMEA_SENTENCE_RMC:{
-          CLOG(INFO, "gps") << "ignoring RMC sentence...";
+          //CLOG(INFO, "gps") << "ignoring RMC sentence...";
         }break;
         case MINMEA_SENTENCE_GSV:{
-          CLOG(INFO,"gps") << "ignoring GSV sentence...";
+          //CLOG(INFO,"gps") << "ignoring GSV sentence...";
         }break;
         case CUSTOM_SENTENCE_VTG:{
           custom_sentence_vtg frame;
