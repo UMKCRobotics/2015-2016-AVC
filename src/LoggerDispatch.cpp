@@ -38,6 +38,7 @@ namespace LoggerDispatchGlobals {
 void LoggerDispatchGlobals::setConfiguration(Conf c){
   port = c.data["logger_dispatch"]["port"].get<string>();
   baud = c.data["logger_dispatch"]["baud"];
+  serial = new serialib;
   int status = serial->Open(LoggerDispatchGlobals::port.c_str(),LoggerDispatchGlobals::baud);
   hasBeenInitialized = status == 1;
 }
