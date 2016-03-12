@@ -1,7 +1,9 @@
-SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_motorcontroller"
+SUBSYSTEM=="tty", ATTRS{serial}=="009F1909", SYMLINK+="arduino_motorcontroller"
 
-SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_pathfinding"
+SUBSYSTEM=="tty", ATTRS{serial}=="00E59777", SYMLINK+="arduino_pathfinding"
 
-SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="arduino_logger"
+SUBSYSTEM=="tty", ATTRS{serial}=="009F19AC", SYMLINK+="arduino_logger"
 
-SUBSYSTEM=="tty", ATTRS{serial}=="INSERT SERIAL HERE", SYMLINK+="gps_avc"
+SUBSYSTEM=="tty", ATTRS{serial}=="00E59739", SYMLINK+="gps_avc"
+
+SUBSYSTEM=="block", ATTRS{serial}=="4C530001120805116493", SYMLINK+="avc_flash_drive"

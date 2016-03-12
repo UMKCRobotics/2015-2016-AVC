@@ -23,10 +23,10 @@ struct GPSInfo{
   long double speed = 0.0; //landspeed 
   long double pdop = 0.0;
   void log(){
-    CLOG(INFO,"gps") << "Latitude: " << node.latitude << " Longitude:" << node.longitude;
-    CLOG(INFO,"gps") << "Lat Deviation: " << deviation.latitude << " Long Deviation: " << deviation.longitude;
-    CLOG(INFO, "gps") << "Last Fix: " << lastFix << " Fix Quality: " << fixQuality << " PDOP: " << pdop;
-      CLOG(INFO,"gps") << "Heading: " << heading << " Speed: " << speed;
+    CLOG_EVERY_N(10,INFO,"gps") << "Latitude: " << node.latitude << " Longitude:" << node.longitude;
+    CLOG_EVERY_N(10,INFO,"gps") << "Lat Deviation: " << deviation.latitude << " Long Deviation: " << deviation.longitude;
+    CLOG_EVERY_N(10, INFO, "gps") << "Last Fix: " << lastFix << " Fix Quality: " << fixQuality << " PDOP: " << pdop << " Sats in use/total: " << satsInUse << "/" << satsInView;
+    CLOG_EVERY_N(10, INFO,"gps") << "Heading: " << heading << " Speed: " << speed;
   }
 };
 

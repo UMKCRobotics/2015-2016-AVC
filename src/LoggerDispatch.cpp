@@ -17,26 +17,28 @@ char LoggerDispatch::levelToChar(el::Level level){
 }
 
 void LoggerDispatch::handle(const el::LogDispatchData* data){
-  if(hasBeenInitialized){
+  if(LoggerDispatchGlobals::hasBeenInitialized){
     //Precede the message with a level indicator for led
     char beginChar = levelToChar(data->logMessage()->level());
     string outString = beginChar + data->logMessage()->logger()->id()+ data->logMessage()->message() + '\n';
-    serial.WriteString(outString.c_str());
+    LoggerDispatchGlobals::serial.WriteString(outString.c_str());
   }
 }
 
 LoggerDispatch::LoggerDispatch(){
-  int status = serial.Open(LoggerDispatchGlobals::port.c_str(),LoggerDispatchGlobals::baud);
-  hasBeenInitialized = status == 1;
 }
 
 namespace LoggerDispatchGlobals {
   string port ="";
   int baud = 0;
+  bool hasBeenInitialized = false;
+  serialib serial;
 }
 
 void LoggerDispatchGlobals::setConfiguration(Conf c){
   port = c.data["logger_dispatch"]["port"].get<string>();
   baud = c.data["logger_dispatch"]["baud"];
+  int status = serial.Open(LoggerDispatchGlobals::port.c_str(),LoggerDispatchGlobals::baud);
+  hasBeenInitialized = status == 1;
 }
 

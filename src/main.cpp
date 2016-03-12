@@ -1,3 +1,5 @@
+#define DEBUG false
+
 #include "logger.h"
 #include "GPS.h"
 #include "Lidar.h"
@@ -5,8 +7,11 @@
 #include "MotorController.h"
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
+#include "StartWaiter.h"
 #include <unistd.h>
+#include <time.h>
 
+using namespace std;
 #include <string>
 #include <sstream>
 
@@ -14,7 +19,7 @@ INITIALIZE_EASYLOGGINGPP
 
 int main(int argv, char* argc[]){
 
-  Conf conf("./conf.json");
+  Conf conf("/home/umkc/2015-2016-AVC/conf.json");
   
   //Setting up logging stuff
   el::Configurations loggingConf;
