@@ -20,7 +20,7 @@ void LoggerDispatch::handle(const el::LogDispatchData* data){
   if(LoggerDispatchGlobals::hasBeenInitialized){
     //Precede the message with a level indicator for led
     char beginChar = levelToChar(data->logMessage()->level());
-    string outString = beginChar + data->logMessage()->logger()->id()+ data->logMessage()->message() + '\n';
+    string outString = beginChar + data->logMessage()->logger()->id()+ data->logMessage()->message() + '$';
     LoggerDispatchGlobals::serial->WriteString(outString.c_str());
   }
 }

@@ -101,3 +101,20 @@ void goButtonInterrupt(){
     Serial.write(1);
     lcdWrite("Sent go command to main board");
 }
+
+String readSerial(){
+    bool continueRead = true;
+    String value = "";
+    //lcd.clear();
+    while (Serial.available() > 0 && continueRead)
+    {
+      char character = (char)Serial.read();
+      if (character == '$')
+      {
+        continueRead = false;
+        continue;
+      }
+      value += character;
+    }
+    return value;
+}
