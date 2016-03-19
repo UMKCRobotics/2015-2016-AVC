@@ -16,7 +16,6 @@ volatile bool finished_init = false;
 LiquidCrystal lcd(2, 11, 5, 4, 6, 7);
 CRGB led[1];
 
-
 void setColor(int r, int g, int b){
   FastLED.showColor(CRGB(r,g,b));
 }
@@ -26,7 +25,7 @@ void setup()
     Serial.begin(9600);
     lcd.begin(16,2);
     FastLED.addLeds<WS2811, led_pin, RGB>(led,1);
-    attachInterrupt(button_pin - 2,goButtonInterrupt, CHANGE);
+    attachInterrupt(button_pin - 2,goButtonInterrupt, HIGH);
     lcdWrite("Starting...");
 }
 
@@ -45,18 +44,18 @@ void lcdWrite(String message){
 }
 
 boolean recieved_first_message = false;
-unsigned long old_time;
+unsigned long old_time = 0;
 
 void loop()
 {
-  unsigned long new_time = millis();
-  if(!recieved_first_message && new_time - old_time > 120){
+  unsigned long new_time;
+  if(!recieved_first_message && (new_time = millis()) - old_time > 120){
     setColor(random(256),random(256),random(256));
     old_time = new_time;
   }
   if(Serial.available() > 0){
     recieved_first_message = true;
-    String inputSerial = Serial.readString();
+    String inputSerial = readSerial();
     char code = inputSerial[0];
     lightOnColor(code);
     lcdWrite(inputSerial.substring(1));
@@ -103,13 +102,14 @@ void goButtonInterrupt(){
 }
 
 String readSerial(){
+    return Serial.readStringUntil('\n');
+/*
     bool continueRead = true;
     String value = "";
-    //lcd.clear();
-    while (Serial.available() > 0 && continueRead)
+    while (continueRead)
     {
       char character = (char)Serial.read();
-      if (character == '$')
+      if (character == '\n')
       {
         continueRead = false;
         continue;
@@ -117,4 +117,5 @@ String readSerial(){
       value += character;
     }
     return value;
+*/
 }

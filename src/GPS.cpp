@@ -49,6 +49,7 @@ void GPS::readAllInQueue(){
    GPSParser::parseNMEAString(output,info);
   }
   logCurrentInfo();
+  usleep(100);
 }
 void GPS::logCurrentInfo(){
   info.log();
@@ -105,7 +106,7 @@ double GPS::calculateHeadingToNode(GPSNode node){
 void GPS::blockUntilFixed(){
     while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
       CLOG_EVERY_N(10,INFO,"gps") << "Waiting on fix...";
-      usleep(100);
+      usleep(1000);
    }
 }
 

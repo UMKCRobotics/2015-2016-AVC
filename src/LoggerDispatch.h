@@ -10,7 +10,7 @@ using namespace std;
 namespace LoggerDispatchGlobals{ //hacky shit to make this work
   extern string port;
   extern int baud;
-  extern serialib* serial;
+  extern serialib serial;
   extern bool hasBeenInitialized;
   //YOU HAVE TO CALL THIS BEFORE YOU REGISTER IT
   void setConfiguration(Conf c);
