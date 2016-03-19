@@ -42,12 +42,8 @@ int main(int argv, char* argc[]){
   int speed = conf.data["testSpeed"].get<int>();
   startwaiter.blockUntilGoSignal();
   GPSNodelist nodelist(conf);
-  gps.blockUntilFixed(); 
-  while(true){
-	usleep(1000000);
-  }
-  /*
   GPSNode node = nodelist.getNextNode();
+  gps.blockUntilFixed(); 
   while(!nodelist.allNodesVisited()){
    if(gps.isOverlapping(node)){
      node = nodelist.getNextNode();
@@ -61,6 +57,9 @@ int main(int argv, char* argc[]){
      usleep(5000);
     }
   }
-  */
+  for(int i = 0; i < 10; ++i){
+	  motor.commandStop();
+	  usleep(5000);
+  }
   return 0;
 }
