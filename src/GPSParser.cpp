@@ -58,7 +58,7 @@ void GPSParser::parseNMEAString(string nmeastring, GPSInfo& info){
         case CUSTOM_SENTENCE_VTG:{
           custom_sentence_vtg frame;
           if(custom_parse_vtg(&frame,line)){
-            double newHeading = minmea_tocoord(&frame.true_track);
+            double newHeading = minmea_tocoord(&frame.magnetic_track);
             if(!(newHeading != newHeading)){ //NaN isn't equal to NaN
               info.heading = newHeading;
             }
