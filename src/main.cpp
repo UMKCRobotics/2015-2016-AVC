@@ -51,7 +51,7 @@ int main(int argv, char* argc[]){
    else{
      double desiredHeading = gps.calculateHeadingToNode(node); 
      //double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
-     motor.commandTurn(bestPossibleHeading);
+     motor.commandTurn(desiredHeading);
      usleep(5000);
      motor.commandForward(speed);
      usleep(5000);
