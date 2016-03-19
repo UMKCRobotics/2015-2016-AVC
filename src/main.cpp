@@ -38,7 +38,7 @@ int main(int argv, char* argc[]){
   //Vision seethings(conf);
 
 
-  StartWaiter startwaiter(LoggerDispatchGlobals::serial);
+  StartWaiter startwaiter(&LoggerDispatchGlobals::serial);
   int speed = conf.data["testSpeed"].get<int>();
   startwaiter.blockUntilGoSignal();
   GPSNodelist nodelist(conf);
