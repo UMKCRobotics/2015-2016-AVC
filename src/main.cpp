@@ -52,7 +52,7 @@ int main(int argv, char* argc[]){
      node = nodelist.getNextNode();
     }
    else{
-     double desiredHeading = gps.calculateHeadingToNode(node); 
+     double desiredHeading = gps.calculateHeadingToNode(compass.curHeading, node); 
      //double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
      motor.commandTurn(desiredHeading);
      usleep(5000);
