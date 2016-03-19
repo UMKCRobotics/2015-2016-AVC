@@ -1,6 +1,6 @@
 SUBSYSTEM=="tty", ATTRS{serial}=="009F1909", SYMLINK+="arduino_motorcontroller"
 
-SUBSYSTEM=="tty", ATTRS{serial}=="00E59777", SYMLINK+="arduino_pathfinding"
+SUBSYSTEM=="tty", ATTRS{serial}=="00E59777", SYMLINK+="arduino_compass"
 
 SUBSYSTEM=="tty", ATTRS{serial}=="009F19AC", SYMLINK+="arduino_logger"
 

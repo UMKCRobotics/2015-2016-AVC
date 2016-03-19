@@ -8,6 +8,7 @@
 #include "Conf.hpp"
 #include "LoggerDispatch.h"
 #include "StartWaiter.h"
+#include "Compass.h"
 #include <unistd.h>
 #include <time.h>
 
@@ -26,6 +27,7 @@ int main(int argv, char* argc[]){
   loggingConf.setToDefault();
   loggingConf.set(el::Level::Global, el::ConfigurationType::Filename, conf.data["logfile"].get<string>());
   el::Loggers::getLogger("gps");
+  el::Loggers::getLogger("compass");
   el::Loggers::getLogger("lidar");
   el::Loggers::getLogger("motorcontrol");
   el::Loggers::reconfigureAllLoggers(loggingConf); //has to bafter all logging conf
@@ -34,6 +36,7 @@ int main(int argv, char* argc[]){
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   GPS gps(conf);
   MotorController motor(conf);
+  Compass compass(conf);
  // Lidar pathfinding(conf);
   //Vision seethings(conf);
 

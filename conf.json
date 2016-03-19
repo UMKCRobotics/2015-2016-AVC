@@ -7,17 +7,12 @@
         "baud": 38400,
         "min_overlap_dist": 0.0001
     },
+    "compass": {
+	    "port": "/dev/arduino_compass",
+	    "baud": 9600,
+    },
     "pathfinding":{
-        "lidar": {
-           "port": "/dev/arduino_pathfinding",
-            "baud": 115200,
-            "safe_length": 62,
-            "ray_maximum": 300,
-            "perform_growth" : false,
-            "add_degree_coefficient": false,
-           "sweep_angle": 180
-        },
-        "camera": {
+         "camera": {
             "index": 0,
             "scale": 0.75,
             "skip_frames": 7,

@@ -25,13 +25,13 @@ class GPS{
   string PORT;
   unsigned int BAUD;
   long double min_overlap_distance;
+  static double calculateAngleToNode(GPSNode current, GPSNode desired);
  public:
   GPSInfo info;
   //Given our current heading, calculate in radians what we'd like our heading to be 
   //assuming the angle we are facing currently is 0
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
-  static double calculateAngleToNode(GPSNode current, GPSNode desired);
   void blockUntilFixed();
   
   bool isOverlapping(GPSNode node);
@@ -39,7 +39,7 @@ class GPS{
   void logCurrentInfo();
 
   //Calculate from where we are to the desired node
-  double calculateHeadingToNode(GPSNode node);
+  double calculateHeadingToNode(double heading,GPSNode node);
 
   //TODO: should spawn a new thread to do all this
   GPS(Conf c);

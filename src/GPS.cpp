@@ -100,8 +100,8 @@ GPS::~GPS(){
   serial.Close();
 }
 
-double GPS::calculateHeadingToNode(GPSNode node){
-  return calculateAngleToNode(info.node,node);
+double GPS::calculateHeadingToNode(double heading, GPSNode node){
+  return calculateDesiredHeading(heading, info.node,node);
 }
 void GPS::blockUntilFixed(){
     while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
