@@ -15,6 +15,9 @@ class Compass{
   Compass(Conf c);
 ~Compass();
  private:
+  double pi = 3.14159265358979323846;
+  double declination_deg;
+  double declination_rad;
   void readAllInQueue();
   bool threadContinue; 
   thread compass_serial_thread;

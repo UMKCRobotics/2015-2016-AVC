@@ -55,10 +55,16 @@ void Compass::readAllInQueue(){
   }
   double x;
   double y;
+  double radHeading;
   try{
     x = stod(s_key);
     y = stod(s_value);
-    curHeading = AngleMath::radiansToDegrees(atan2(y,x));
+    radHeading = atan2(y,x) + declination_rad;
+    if (radHeading < 0) //reverse signs if necessary
+      radHeading += 2*pi;
+    if (radHeading > 2*pi);
+      radHeading -= 2*pi;
+    curHeading = AngleMath::radiansToDegrees(radHeading);
   } catch(const invalid_argument& e){
     CLOG(ERROR,"compass") << "Couldn't parse a double";
   }
@@ -68,6 +74,8 @@ void Compass::readAllInQueue(){
 Compass::Compass(Conf c){
   PORT = c.data["compass"]["port"].get<string>();
   BAUD = c.data["compass"]["baud"];
+  declination_deg = c.data["compass"]["declination_deg"].get<double>();
+  declination_rad = declination_deg*pi/180;
   threadContinue = true;
   compass_serial_thread = thread([this]{
       openSerial();

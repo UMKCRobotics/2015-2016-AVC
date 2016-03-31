@@ -10,6 +10,7 @@
     "compass": {
 	    "port": "/dev/arduino_compass",
 	    "baud": 9600,
+        "declination_deg": 1.81067
     },
     "pathfinding":{
          "camera": {
