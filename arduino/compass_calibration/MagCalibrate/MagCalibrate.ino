@@ -111,7 +111,7 @@ void readMagData(double mag_temp[3])
 
 void setupHMC5883L()
 {  
-  compass.SetScale(1.0);
+  compass.SetScale(0.88);
   compass.SetMeasurementMode(Measurement_Continuous);
 }
  

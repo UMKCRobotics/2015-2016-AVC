@@ -22,17 +22,30 @@ void transformation(float uncalibrated_values[3])
   //replace M11, M12,..,M33 with your transformation matrix data
   double calibration_matrix[3][3] = 
   {
-    {1.442, 0.002, 0.063},
+    /*{1.442, 0.002, 0.063},
     {0.23, 1.046, 0.073},
-    {0.039, -0.002, 1.261}  
+    {0.039, -0.002, 1.261}*/  
+    /*{0.930, 0.000, 0.000},
+    {0.000, 1.020, 0.000},
+    {0.000, 0.000, 1.060}*/
+    {0.950, 0.000, 0.000},
+    {0.000, 0.990, 0.000},
+    {0.000, 0.000, 1.070}
   };
   //bias[3] is the bias
   //replace Bx, By, Bz with your bias data
   double bias[3] = 
   {
-    -46.654,
+    /*-46.654,
     -158.777,
-    -4.513
+    -4.513*/
+    /*-47.50,
+    -159.00,
+    8.50*/
+    -50.00,
+    -143.00,
+    -1.00
+
   };  
   //calculation
   for (int i=0; i<3; ++i) uncalibrated_values[i] = uncalibrated_values[i] - bias[i];
@@ -87,6 +100,7 @@ void loop()
   Serial.print(',');
   Serial.print(calibrated_values[1]);
   Serial.print('$');
+  Serial.println(heading(calibrated_values[0],calibrated_values[1]));
 
 
   delay(100); 
