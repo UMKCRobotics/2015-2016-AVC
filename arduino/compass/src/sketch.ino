@@ -100,7 +100,7 @@ void loop()
   Serial.print(',');
   Serial.print(calibrated_values[1]);
   Serial.print('$');
-  Serial.println(heading(calibrated_values[0],calibrated_values[1]));
+  //Serial.println(heading(calibrated_values[0],calibrated_values[1]));
 
 
   delay(100); 
