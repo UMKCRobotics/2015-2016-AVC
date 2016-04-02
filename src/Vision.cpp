@@ -51,6 +51,12 @@ void Vision::initialize_values(Conf c)
 	//Get frame scaling
 	scale = c.data["pathfinding"]["camera"]["scale"].get<double>();
 
+	//Get if should flip frame (camera mounted upside down)
+	if (c.data["pathfinding"]["camera"]["flip"].get<int>() == 1)
+		flip = true;
+	else
+		flip = false;
+
 	//Camera calibration constants
 	camera_matrix_arr[0][0] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["00"].get<double>();
     camera_matrix_arr[0][1] = 0;
@@ -82,6 +88,11 @@ VisionReadings Vision::readCamera() {
 		cap_main >> frame; // get a new frame from camera
 	}
 	resize(frame, frame, size, scale, scale); //resize image by desired scaling factor (<1 = shrink)
+	//flip if necessary
+	if (flip)
+	{
+		flip(frame, frame, -1);
+	}
 	//fix distortion
 	Mat tempframe = frame.clone();
     undistort(tempframe, frame, camera_matrix, distort_coeffs);

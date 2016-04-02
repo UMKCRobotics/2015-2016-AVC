@@ -14,6 +14,7 @@
     },
     "pathfinding":{
          "camera": {
+            "flip": 1,
             "index": 0,
             "scale": 0.75,
             "skip_frames": 7,
