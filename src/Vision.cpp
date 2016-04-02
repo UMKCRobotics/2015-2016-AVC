@@ -50,6 +50,26 @@ void Vision::initialize_values(Conf c)
 
 	//Get frame scaling
 	scale = c.data["pathfinding"]["camera"]["scale"].get<double>();
+
+	//Camera calibration constants
+	camera_matrix_arr[0][0] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["00"].get<double>();
+    camera_matrix_arr[0][1] = 0;
+    camera_matrix_arr[0][2] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["02"].get<double>();
+    camera_matrix_arr[1][0] = 0;
+    camera_matrix_arr[1][1] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["11"].get<double>();
+    camera_matrix_arr[1][2] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["12"].get<double>();
+    camera_matrix_arr[2][0] = 0;
+    camera_matrix_arr[2][1] = 0;
+    camera_matrix_arr[2][2] = 1;
+    camera_matrix = Mat(3,3,CV_64F,camera_matrix_arr);
+
+    distort_coeffs_arr[0] = c.data["pathfinding"]["camera"]["cam"]["distortion_coeffs"]["0"].get<double>();
+    distort_coeffs_arr[1] = c.data["pathfinding"]["camera"]["cam"]["distortion_coeffs"]["1"].get<double>();
+    distort_coeffs_arr[2] = c.data["pathfinding"]["camera"]["cam"]["distortion_coeffs"]["2"].get<double>();
+    distort_coeffs_arr[3] = c.data["pathfinding"]["camera"]["cam"]["distortion_coeffs"]["3"].get<double>();
+    distort_coeffs_arr[4] = c.data["pathfinding"]["camera"]["cam"]["distortion_coeffs"]["4"].get<double>();
+    distort_coeffs = Mat(1,5,CV_64F,distort_coeffs_arr);
+
 }
 
 VisionReadings Vision::readCamera() {
@@ -62,6 +82,10 @@ VisionReadings Vision::readCamera() {
 		cap_main >> frame; // get a new frame from camera
 	}
 	resize(frame, frame, size, scale, scale); //resize image by desired scaling factor (<1 = shrink)
+	//fix distortion
+	Mat tempframe = frame.clone();
+    undistort(tempframe, frame, camera_matrix, distort_coeffs);
+    //continue with blurs
 	Mat blurred;
 	GaussianBlur(frame, blurred, Size(11,11), 0);
 	Mat hsv;
