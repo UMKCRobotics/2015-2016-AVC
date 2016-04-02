@@ -53,7 +53,7 @@ void Vision::initialize_values(Conf c)
 }
 
 VisionReadings Vision::readCamera() {
-	VisionReadings current_frame = {{0,0,0,0},{0,0,0,0}};
+	VisionReadings current_frame = {{0,0,0,0},{0,0,0,0},{0,0}};
 
 	Size size = Size(0,0);
 	Mat frame;
