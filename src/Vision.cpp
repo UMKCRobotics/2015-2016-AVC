@@ -95,7 +95,7 @@ VisionReadings Vision::readCamera() {
 	}
 	//fix distortion
 	Mat tempframe = frame.clone();
-    undistort(tempframe, frame, camera_matrix, distort_coeffs);
+    undistort(tempframe, frame, camera_matrix, distort_coeffs,getOptimalNewCameraMatrix(camera_matrix, distort_coeffs,framesize,0));
     //continue with blurs
 	Mat blurred;
 	GaussianBlur(frame, blurred, Size(11,11), 0);
