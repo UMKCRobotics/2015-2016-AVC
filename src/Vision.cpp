@@ -53,9 +53,9 @@ void Vision::initialize_values(Conf c)
 
 	//Get if should flip frame (camera mounted upside down)
 	if (c.data["pathfinding"]["camera"]["flip"].get<int>() == 1)
-		flip = true;
+		flip_im = true;
 	else
-		flip = false;
+		flip_im = false;
 
 	//Camera calibration constants
 	camera_matrix_arr[0][0] = c.data["pathfinding"]["camera"]["cam"]["camera_matrix"]["00"].get<double>();
@@ -89,11 +89,12 @@ VisionReadings Vision::readCamera() {
 	}
 	resize(frame, frame, size, scale, scale); //resize image by desired scaling factor (<1 = shrink)
 	//flip if necessary
-	if (flip)
+	if (flip_im)
 	{
 		flip(frame, frame, -1);
 	}
 	//fix distortion
+	Size framesize = Size(frame.cols,frame.rows);
 	Mat tempframe = frame.clone();
     undistort(tempframe, frame, camera_matrix, distort_coeffs,getOptimalNewCameraMatrix(camera_matrix, distort_coeffs,framesize,0));
     //continue with blurs

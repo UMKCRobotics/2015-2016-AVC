@@ -43,7 +43,7 @@ class Vision : public Pathfinder {
 		VideoCapture cap_main;
 		thread vision_thread;
 		vector<vector<Scalar>> colors_track = vector<vector<Scalar>>(4, vector<Scalar>(2));
-		bool flip;
+		bool flip_im;
 		//Variables from checkerboard calibration
 		double camera_matrix_arr[3][3];
 		double distort_coeffs_arr[5];
