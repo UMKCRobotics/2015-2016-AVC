@@ -103,7 +103,7 @@ void loop()
   //Serial.println(heading(calibrated_values[0],calibrated_values[1]));
 
 
-  delay(1000); 
+  delay(400); 
 } 
 
 void setupHMC5883L()

@@ -68,7 +68,7 @@ void Compass::readAllInQueue(){
   } catch(const invalid_argument& e){
     CLOG(ERROR,"compass") << "Couldn't parse a double";
   }
-  usleep(100);
+  usleep(50);
 }
 
 Compass::Compass(Conf c){
