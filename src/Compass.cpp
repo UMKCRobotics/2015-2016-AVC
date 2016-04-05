@@ -3,6 +3,7 @@
 void Compass::readAllInQueue(){
   char out_char = ' ';
   string s_key, s_value;
+  serial.WriteString("1");
   while(true){
     char code = serial.ReadChar(&out_char); //add error reporting
     if(code < 0){
@@ -56,19 +57,29 @@ void Compass::readAllInQueue(){
   double x;
   double y;
   double radHeading;
+  int tempHeading;
   try{
-    x = stod(s_key);
-    y = stod(s_value);
-    radHeading = atan2(y,x) + declination_rad;
+    //x = stod(s_key);
+    //y = stod(s_value);
+    tempHeading = stod(s_value);
+    /*radHeading = atan2(y,x) + declination_rad;
     if (radHeading < 0) //reverse signs if necessary
       radHeading += 2*pi;
     if (radHeading > 2*pi);
       radHeading -= 2*pi;
     curHeading = AngleMath::radiansToDegrees(radHeading);
+*/
+    tempHeading += declination_rad;
+    if (tempHeading < 0)
+       tempHeading += 360;
+    else if (tempHeading > 360)
+       tempHeading -= 360;
+    curHeading = tempHeading;
+    CLOG(INFO,"compass") << "heading: " << curHeading;
   } catch(const invalid_argument& e){
     CLOG(ERROR,"compass") << "Couldn't parse a double";
   }
-  usleep(50);
+  usleep(1000000);
 }
 
 Compass::Compass(Conf c){
