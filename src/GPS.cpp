@@ -3,7 +3,12 @@
 
 double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired){
   double angleBetweenNodes = GPS::calculateAngleToNode(current,desired);
-  return AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes);
+  double tempAngle = -AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes)+90;
+  if (tempAngle >= 360)
+    tempAngle -= 360;
+  else if (tempAngle < 0)
+    tempAngle += 360;
+  return tempAngle;
 }
 
 double GPS::calculateAngleToNode(GPSNode current, GPSNode desired){

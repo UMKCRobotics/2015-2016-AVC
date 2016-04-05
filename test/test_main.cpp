@@ -12,11 +12,43 @@ INITIALIZE_EASYLOGGINGPP//Don't remove this
 //Testing framework tutorial provided below
 //https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
 
-TEST_CASE("BLANK TEST","TEST"){
+/*TEST_CASE("BLANK TEST","TEST"){
 	REQUIRE( 1 == 1);
+}*/
+
+TEST_CASE("NORTH","TEST"){
+  REQUIRE(180 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5767)));
 }
 
-TEST_CASE("GPS","CALCULATE ANGLES WORKS")
+TEST_CASE("SOUTH","TEST"){
+  REQUIRE(0 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5767)));
+}
+
+TEST_CASE("EAST","TEST"){
+  REQUIRE(270 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0346,-94.5765)));
+}
+
+TEST_CASE("WEST","TEST"){
+  REQUIRE(90 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0346,-94.5767)));
+}
+
+TEST_CASE("NORTHEAST","TEST"){
+  REQUIRE(225 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5765)));
+}
+
+TEST_CASE("NORTHWEST","TEST"){
+  REQUIRE(135 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5765),GPSNode(39.0346,-94.5767)));
+}
+
+TEST_CASE("SOUTHEAST","TEST"){
+  REQUIRE(315 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5765)));
+}
+
+TEST_CASE("SOUTHWEST","TEST"){
+  REQUIRE(45 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0344,-94.5767)));
+}
+
+/*TEST_CASE("GPS","CALCULATE ANGLES WORKS")
 {
   double angles = GPS::calculateAngleToNode(GPSNode(0,0),GPSNode(0,1));
 		REQUIRE(angles == 0);
@@ -58,4 +90,4 @@ TEST_CASE("PARSER","vtg parser"){
   REQUIRE(344 == frame.magnetic_track.value);
   REQUIRE(55 == frame.ground_speed_knots.value);
   REQUIRE(102 == frame.ground_speed_kmh.value);
-}
+}*/
