@@ -2,8 +2,20 @@
 #include <math.h>
 
 double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired){
+  
+  double desiredAbsoluteHeading = calculateAbsoluteHeading(currentHeading,current,desired);
+  double desiredRelativeHeading = round(desiredAbsoluteHeading - currentHeading);
+  if(abs(desiredRelativeHeading) > 180)
+    desiredRelativeHeading += 360;
+  if(desiredRelativeHeading >= 360)
+    desiredRelativeHeading -= 360;
+  return desiredRelativeHeading;
+}
+
+double GPS::calculateAbsoluteHeading(double currentHeading, GPSNode current, GPSNode desired){
   double angleBetweenNodes = GPS::calculateAngleToNode(current,desired);
   double tempAngle = -AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes)+90;
+  tempAngle = round(tempAngle);
   if (tempAngle >= 360)
     tempAngle -= 360;
   else if (tempAngle < 0)

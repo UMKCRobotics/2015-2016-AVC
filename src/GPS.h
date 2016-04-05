@@ -32,6 +32,7 @@ class GPS{
   //assuming the angle we are facing currently is 0
   //Basically, returns the radian value we need to adjust to
   static double calculateDesiredHeading(double currentHeading, GPSNode current, GPSNode desired);
+  static double calculateAbsoluteHeading(double currentHeading, GPSNode current, GPSNode desired);
   void blockUntilFixed();
   
   bool isOverlapping(GPSNode node);

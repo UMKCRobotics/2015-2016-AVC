@@ -15,37 +15,70 @@ INITIALIZE_EASYLOGGINGPP//Don't remove this
 /*TEST_CASE("BLANK TEST","TEST"){
 	REQUIRE( 1 == 1);
 }*/
-
-TEST_CASE("NORTH","TEST"){
-  REQUIRE(180 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5767)));
+//ABSOLUTE
+TEST_CASE("NORTH_ABS","TEST"){
+  REQUIRE(180 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5767)));
 }
 
-TEST_CASE("SOUTH","TEST"){
-  REQUIRE(0 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5767)));
+TEST_CASE("SOUTH_ABS","TEST"){
+  REQUIRE(0 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5767)));
 }
 
-TEST_CASE("EAST","TEST"){
-  REQUIRE(270 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0346,-94.5765)));
+TEST_CASE("EAST_ABS","TEST"){
+  REQUIRE(270 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0346,-94.5765)));
 }
 
-TEST_CASE("WEST","TEST"){
-  REQUIRE(90 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0346,-94.5767)));
+TEST_CASE("WEST_ABS","TEST"){
+  REQUIRE(90 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0346,-94.5767)));
 }
 
-TEST_CASE("NORTHEAST","TEST"){
-  REQUIRE(225 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5765)));
+TEST_CASE("NORTHEAST_ABS","TEST"){
+  REQUIRE(225 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5765)));
 }
 
-TEST_CASE("NORTHWEST","TEST"){
-  REQUIRE(135 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5765),GPSNode(39.0346,-94.5767)));
+TEST_CASE("NORTHWEST_ABS","TEST"){
+  REQUIRE(135 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0344,-94.5765),GPSNode(39.0346,-94.5767)));
 }
 
-TEST_CASE("SOUTHEAST","TEST"){
-  REQUIRE(315 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5765)));
+TEST_CASE("SOUTHEAST_ABS","TEST"){
+  REQUIRE(315 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5765)));
 }
 
-TEST_CASE("SOUTHWEST","TEST"){
-  REQUIRE(45 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0344,-94.5767)));
+TEST_CASE("SOUTHWEST_ABS","TEST"){
+  REQUIRE(45 == GPS::calculateAbsoluteHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0344,-94.5767)));
+}
+
+//RELATIVE
+TEST_CASE("NORTH_REL","TEST"){
+  REQUIRE(0 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5767)));
+}
+
+TEST_CASE("SOUTH_REL","TEST"){
+  REQUIRE(-180 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5767)));
+}
+
+TEST_CASE("EAST_REL","TEST"){
+  REQUIRE(90 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0346,-94.5765)));
+}
+
+TEST_CASE("WEST_REL","TEST"){
+  REQUIRE(-90 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0346,-94.5767)));
+}
+
+TEST_CASE("NORTHEAST_REL","TEST"){
+  REQUIRE(45 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5767),GPSNode(39.0346,-94.5765)));
+}
+
+TEST_CASE("NORTHWEST_REL","TEST"){
+  REQUIRE(-45 == GPS::calculateDesiredHeading(180,GPSNode(39.0344,-94.5765),GPSNode(39.0346,-94.5767)));
+}
+
+TEST_CASE("SOUTHEAST_REL","TEST"){
+  REQUIRE(135 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5767),GPSNode(39.0344,-94.5765)));
+}
+
+TEST_CASE("SOUTHWEST_REL","TEST"){
+  REQUIRE(-135 == GPS::calculateDesiredHeading(180,GPSNode(39.0346,-94.5765),GPSNode(39.0344,-94.5767)));
 }
 
 /*TEST_CASE("GPS","CALCULATE ANGLES WORKS")
