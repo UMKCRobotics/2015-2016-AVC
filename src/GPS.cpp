@@ -5,10 +5,10 @@ double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSN
   
   double desiredAbsoluteHeading = calculateAbsoluteHeading(currentHeading,current,desired);
   double desiredRelativeHeading = desiredAbsoluteHeading - currentHeading;
-  if(abs(desiredRelativeHeading) > 180)
-    desiredRelativeHeading += 360;
-  if(desiredRelativeHeading >= 360)
-    desiredRelativeHeading -= 360;
+  //if(abs(desiredRelativeHeading) > 180)
+  //  desiredRelativeHeading += 360;
+  //if(desiredRelativeHeading >= 360)
+  //  desiredRelativeHeading -= 360;
   return desiredRelativeHeading;
 }
 
