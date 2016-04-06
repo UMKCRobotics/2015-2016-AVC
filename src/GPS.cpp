@@ -14,12 +14,33 @@ double GPS::calculateDesiredHeading(double currentHeading, GPSNode current, GPSN
 
 double GPS::calculateAbsoluteHeading(double currentHeading, GPSNode current, GPSNode desired){
   double angleBetweenNodes = calculateAngleToNode(current,desired);
-  double tempAngle = -AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes)+90;
-  tempAngle = round(tempAngle);
-  if (tempAngle >= 360)
-    tempAngle -= 360;
-  else if (tempAngle < 0)
-    tempAngle += 360;
+  //double tempAngle = -AngleMath::angleBetweenTwoAngles(currentHeading,angleBetweenNodes)+90;
+  //tempAngle = round(tempAngle);
+  //if (tempAngle >= 360)
+  //  tempAngle -= 360;
+  //else if (tempAngle < 0)
+  //  tempAngle += 360;
+  //return angleBetweenNodes;
+  angleBetweenNodes = round(angleBetweenNodes);
+  double tempAngle;
+  if (angleBetweenNodes <= 90 && angleBetweenNodes > 0)
+  {
+    tempAngle = 270 - angleBetweenNodes;
+  }
+  else if (angleBetweenNodes <= 0 && angleBetweenNodes > -90)
+  {
+    tempAngle = 270 - angleBetweenNodes;
+  }
+  else if (angleBetweenNodes <= -90 && angleBetweenNodes > -180)
+  {
+    tempAngle = (-angleBetweenNodes) - 90;
+  }
+  else if (angleBetweenNodes <= 180 && angleBetweenNodes > 90)
+  {
+    tempAngle = (180 - angleBetweenNodes) + 90;
+  }
+  if (tempAngle == -180)
+    tempAngle = -tempAngle;
   return tempAngle;
 }
 
