@@ -52,8 +52,9 @@ int main(int argv, char* argc[]){
      node = nodelist.getNextNode();
     }
    else{
-     double desiredHeading = gps.calculateHeadingToNode(compass.curHeading, node); 
+     double desiredHeading = gps.calculateDesiredHeading(compass.curHeading, gps.info.node, node); 
      //double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
+     CLOG(INFO,"gps")  << "cd: " << compass.curHeading << "dh: " << desiredHeading;
      motor.commandTurn(desiredHeading);
      usleep(5000);
      motor.commandForward(speed);

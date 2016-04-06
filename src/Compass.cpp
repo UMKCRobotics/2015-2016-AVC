@@ -70,6 +70,7 @@ void Compass::readAllInQueue(){
     curHeading = AngleMath::radiansToDegrees(radHeading);
 */
     tempHeading += declination_rad;
+    tempHeading += 180;
     if (tempHeading < 0)
        tempHeading += 360;
     else if (tempHeading > 360)
@@ -79,7 +80,7 @@ void Compass::readAllInQueue(){
   } catch(const invalid_argument& e){
     CLOG(ERROR,"compass") << "Couldn't parse a double";
   }
-  usleep(1000000);
+  usleep(250000);
 }
 
 Compass::Compass(Conf c){
