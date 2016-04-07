@@ -6,6 +6,7 @@ MotorController::MotorController(Conf c) {
 	configuration = c;
         turn_coefficient = c.data["motorcontroller"]["gillens_equation"]["turn_coefficient"];
         gillens_limit = c.data["motorcontroller"]["gillens_equation"]["gillens_limit"];
+        turn_deadzone = c.data["motorcontroller"]["turn_deadzone"];
 	openSerial();
 }
 
@@ -56,6 +57,7 @@ void MotorController::commandStraight() {
 
 void MotorController::commandTurn(int turn) {
 	string turn_s = to_string(turn);
+        if(abs(turn) < turn_deadzone){ return; }
 	if (turn >= 0)
 	{
 		turn_s = "+" + turn_s;

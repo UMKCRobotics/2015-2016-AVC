@@ -106,6 +106,7 @@
     "motorcontroller": {
         "port": "/dev/arduino_motorcontroller",
         "baud": 57600,
+        "turn_deadzone": 2,
         "gillens_equation":{
             "gillens_limit": 16000,
             "turn_coefficient": 1.0

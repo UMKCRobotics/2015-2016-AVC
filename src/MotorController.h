@@ -6,6 +6,7 @@
 #include "Conf.hpp"
 #include <string>
 #include <iostream>
+#include <math.h>
 
 class MotorController{
   private:
@@ -14,7 +15,7 @@ class MotorController{
     Conf configuration;
     double turn_coefficient;
     int gillens_limit;
-
+    int turn_deadzone;
   public:
     MotorController(Conf c);
     void commandStop();
