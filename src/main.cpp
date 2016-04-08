@@ -22,7 +22,6 @@ int main(int argv, char* argc[]){
 
   Conf conf("/home/umkc/2015-2016-AVC/conf.json");
 
-  usleep(100000); 
   //Setting up logging stuff
   el::Configurations loggingConf;
   loggingConf.setToDefault();
@@ -37,11 +36,7 @@ int main(int argv, char* argc[]){
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   GPS gps(conf);
 
-while(true){}
-/*
   MotorController motor(conf);
-
-  /*MotorController motor(conf);
 
   Compass compass(conf);
   //Lidar pathfinding(conf);
@@ -60,7 +55,7 @@ while(true){}
     }
    else{
      double desiredHeading = gps.calculateDesiredHeading(compass.curHeading, gps.info.node, node); 
-     CLOG(INFO,"gps")  << "cd: " << compass.curHeading << "dh: " << desiredHeading;
+     CLOG_EVERY_N(12,INFO,"gps")  << "cd: " << compass.curHeading << "dh: " << desiredHeading;
      motor.commandTurn(desiredHeading);
      usleep(100000);
      motor.commandForward(speed);
@@ -70,6 +65,6 @@ while(true){}
   for(int i = 0; i < 10; ++i){
 	  motor.commandStop();
 	  usleep(5000);
-  }*/
+  }
   return 0;
 }

@@ -86,7 +86,8 @@ void Compass::readAllInQueue(){
       radHeading += 2*pi;
     if (radHeading > 2*pi);
       radHeading -= 2*pi;
-    curHeading = AngleMath::radiansToDegrees(radHeading);
+    double tempHeading = AngleMath::radiansToDegrees(radHeading);
+    curHeading = tempHeading + 360;
 /*
     tempHeading += declination_deg;
     tempHeading += 180;
