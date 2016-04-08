@@ -21,7 +21,8 @@ INITIALIZE_EASYLOGGINGPP
 int main(int argv, char* argc[]){
 
   Conf conf("/home/umkc/2015-2016-AVC/conf.json");
-  
+
+  usleep(100000); 
   //Setting up logging stuff
   el::Configurations loggingConf;
   loggingConf.setToDefault();
@@ -35,9 +36,11 @@ int main(int argv, char* argc[]){
  LoggerDispatchGlobals::setConfiguration(conf);
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   GPS gps(conf);
+while(true){}
+/*
   MotorController motor(conf);
   Compass compass(conf);
- // Lidar pathfinding(conf);
+  //Lidar pathfinding(conf);
   //Vision seethings(conf);
 
 
@@ -46,19 +49,18 @@ int main(int argv, char* argc[]){
   startwaiter.blockUntilGoSignal();
   GPSNodelist nodelist(conf);
   GPSNode node = nodelist.getNextNode();
-  gps.blockUntilFixed(); 
+//  gps.blockUntilFixed(); 
   while(!nodelist.allNodesVisited()){
    if(gps.isOverlapping(node)){
      node = nodelist.getNextNode();
     }
    else{
      double desiredHeading = gps.calculateDesiredHeading(compass.curHeading, gps.info.node, node); 
-     //double bestPossibleHeading = pathfinding.bestAvailableHeading(desiredHeading);
      CLOG(INFO,"gps")  << "cd: " << compass.curHeading << "dh: " << desiredHeading;
      motor.commandTurn(desiredHeading);
-     usleep(5000);
+     usleep(100000);
      motor.commandForward(speed);
-     usleep(5000);
+     usleep(100000);
     }
   }
   for(int i = 0; i < 10; ++i){
@@ -66,4 +68,5 @@ int main(int argv, char* argc[]){
 	  usleep(5000);
   }
   return 0;
+*/
 }

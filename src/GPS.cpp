@@ -66,7 +66,7 @@ string GPS::readNMEAString(){
       return "";
     }
     if(code == -2){
-      CLOG(ERROR,"gps") << "READ ERROR.";
+      //CLOG(ERROR,"gps") << "READ ERROR.";
       return "";
     }
     if(code == 0){
@@ -88,7 +88,9 @@ void GPS::readAllInQueue(){
   while(serial.Peek() > 0){
    string output =  readNMEAString();
    //CLOG(INFO,"gps") << "found string: " << output;
-   GPSParser::parseNMEAString(output,info);
+   if(!(output.compare("") == 0)){
+	   GPSParser::parseNMEAString(output,info);
+   }
   }
   logCurrentInfo();
   usleep(100);
@@ -146,7 +148,7 @@ double GPS::calculateHeadingToNode(double heading, GPSNode node){
   return calculateDesiredHeading(heading, info.node,node);
 }
 void GPS::blockUntilFixed(){
-    while(info.lastFix == 0 || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
+   while(info.wasFixed() || info.node.latitude != info.node.latitude || info.node.longitude != info.node.longitude){ 
       CLOG_EVERY_N(10,INFO,"gps") << "Waiting on fix...";
       usleep(1000);
    }

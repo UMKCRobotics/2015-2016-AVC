@@ -1,16 +1,16 @@
 {
     "runningTime" : 120,
-    "testSpeed": 2,
+    "testSpeed": 7,
     "logfile": "/media/usb_avc/log",
     "gps": {
-        "port": "/dev/gps_avc",
+        "port": "/dev/ttyUSB0",
         "baud": 38400,
         "min_overlap_dist": 0.0001
     },
     "compass": {
         "port": "/dev/arduino_compass",
         "baud": 9600,
-        "declination_deg": 1.81067
+        "declination_deg": -7.08
     },
     "pathfinding":{
          "camera": {
@@ -101,11 +101,12 @@
         "baud": 9600
     },
     "nodelist": {
-        "file":"./nodes"
+        "file":"/home/umkc/2015-2016-AVC/nodes"
     },
     "motorcontroller": {
         "port": "/dev/arduino_motorcontroller",
         "baud": 57600,
+        "turn_deadzone": 2,
         "gillens_equation":{
             "gillens_limit": 16000,
             "turn_coefficient": 1.0
