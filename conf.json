@@ -10,15 +10,15 @@
     "compass": {
         "port": "/dev/arduino_compass",
         "baud": 9600,
-        "declination_deg": -7.08
-	"bias": {
-		"x": -74.5,
-		"y": 71.6
-	},
-	"scalar":{
-		"x": 0.92979,
-		"y": 1.08167
-	}
+        "declination_deg": -7.08,
+    	"bias": {
+    		"x": -74.5,
+    		"y": 71.6
+    	},
+    	"scalar":{
+    		"x": 0.92979,
+    		"y": 1.08167
+    	}
     },
     "pathfinding":{
          "camera": {
