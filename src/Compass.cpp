@@ -12,7 +12,7 @@ void Compass::readAllInQueue(){
         CLOG(ERROR,"compass")  << "timeout reached in serial read";
         break;
       case -1:
-        CLOG(ERROR,"compass") << "erorr while setting the timeout";
+        CLOG(ERROR,"compass") << "error while setting the timeout";
         break;
       case -2:
         CLOG(ERROR,"compass") << "error while reading the byte";
@@ -62,13 +62,32 @@ void Compass::readAllInQueue(){
     x = stod(s_key);
     y = stod(s_value);
     //tempHeading = stod(s_value);
+
+    x = x - bias[0];
+    y = y - bias[1];
+
+    double coords[] = {x, y};
+
+    double matrix[2][2] = {{scalar[0], 0},{0, scalar[1]}};
+
+    for(int i = 0; i < 2; i++)
+    {
+      for(int j = 0; j < 2; j++)
+      {
+        coords[i] += matrix[i][j] * coords[i];
+      }
+    }
+
+    x = coords[0];
+    y = coords[1];
+
     radHeading = atan2(y,x) + declination_rad;
     if (radHeading < 0) //reverse signs if necessary
       radHeading += 2*pi;
     if (radHeading > 2*pi);
       radHeading -= 2*pi;
     curHeading = AngleMath::radiansToDegrees(radHeading);
-
+/*
     tempHeading += declination_deg;
     tempHeading += 180;
     if (tempHeading < 0)
@@ -76,7 +95,7 @@ void Compass::readAllInQueue(){
     else if (tempHeading > 360)
        tempHeading -= 360;
     curHeading = tempHeading;
-
+*/
     CLOG_EVERY_N(10,INFO,"compass") << "heading: " << curHeading;
 
   } catch(const invalid_argument& e){
@@ -88,6 +107,12 @@ void Compass::readAllInQueue(){
 Compass::Compass(Conf c){
   PORT = c.data["compass"]["port"].get<string>();
   BAUD = c.data["compass"]["baud"];
+  bias[0] = c.data["compass"]["bias"]["x"].get<double>();
+  bias[1] = c.data["compass"]["bias"]["y"].get<double>();
+
+  scalar[0] = c.data["compass"]["scalar"]["x"].get<double>();
+  scalar[1] = c.data["compass"]["scalar"]["y"].get<double>();
+
   declination_deg = c.data["compass"]["declination_deg"].get<double>();
   declination_rad = declination_deg*pi/180;
   threadContinue = true;

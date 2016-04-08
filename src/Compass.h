@@ -19,7 +19,9 @@ class Compass{
   double declination_deg;
   double declination_rad;
   void readAllInQueue();
-  bool threadContinue; 
+  bool threadContinue;
+  double bias[2];
+  double scalar[2];
   thread compass_serial_thread;
   string PORT;
   unsigned int BAUD;
