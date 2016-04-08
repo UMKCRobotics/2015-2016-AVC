@@ -57,7 +57,7 @@ void MotorController::commandStraight() {
 
 void MotorController::commandTurn(int turn) {
 	string turn_s = to_string(turn);
-        if(abs(turn) < turn_deadzone){ return; }
+        if(abs(turn) < turn_deadzone){ turn = 0; }
 	if (turn >= 0)
 	{
 		turn_s = "+" + turn_s;
