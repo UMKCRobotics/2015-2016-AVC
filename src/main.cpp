@@ -36,9 +36,13 @@ int main(int argv, char* argc[]){
  LoggerDispatchGlobals::setConfiguration(conf);
   el::Helpers::installLogDispatchCallback<LoggerDispatch>("LoggerDispatch");
   GPS gps(conf);
+
 while(true){}
 /*
   MotorController motor(conf);
+
+  /*MotorController motor(conf);
+
   Compass compass(conf);
   //Lidar pathfinding(conf);
   //Vision seethings(conf);
@@ -66,7 +70,6 @@ while(true){}
   for(int i = 0; i < 10; ++i){
 	  motor.commandStop();
 	  usleep(5000);
-  }
+  }*/
   return 0;
-*/
 }

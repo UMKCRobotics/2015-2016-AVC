@@ -76,11 +76,13 @@ void Compass::readAllInQueue(){
     else if (tempHeading > 360)
        tempHeading -= 360;
     curHeading = tempHeading;
+
     CLOG_EVERY_N(10,INFO,"compass") << "heading: " << curHeading;
+
   } catch(const invalid_argument& e){
     CLOG(ERROR,"compass") << "Couldn't parse a double";
   }
-  usleep(250000);
+  usleep(200000);
 }
 
 Compass::Compass(Conf c){
